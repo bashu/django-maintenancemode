@@ -1,3 +1,4 @@
+import re
 from django.conf import settings
 from django.core import urlresolvers
 
@@ -5,7 +6,9 @@ from django.conf.urls import defaults
 defaults.handler503 = 'maintenancemode.views.defaults.temporary_unavailable'
 defaults.__all__.append('handler503')
 
-from maintenancemode.conf.settings import MAINTENANCE_MODE
+from maintenancemode.conf.settings import MAINTENANCE_MODE, MAINTENANCE_IGNORE_URLS
+
+IGNORE_URLS = tuple([re.compile(url) for url in MAINTENANCE_IGNORE_URLS])
 
 class MaintenanceModeMiddleware(object):
     def process_request(self, request):
@@ -17,11 +20,16 @@ class MaintenanceModeMiddleware(object):
         if request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return None
         
-        # Allow acess if the user doing the request is logged in and a
+        # Allow access if the user doing the request is logged in and a
         # staff member.
         if hasattr(request, 'user') and request.user.is_staff:
             return None
-        
+
+        # Check if a path is explicitly excluded from maintenance mode
+        for url in IGNORE_URLS:
+            if url.match(request.path_info):
+                return None
+
         # Otherwise show the user the 503 page
         resolver = urlresolvers.get_resolver(None)
         

@@ -1,3 +1,4 @@
+import re
 import os.path
 
 from django.test import TestCase
@@ -77,4 +78,15 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
         client = Client(REMOTE_ADDR='127.0.0.1')
         
         response = client.get('/')
+        self.assertContains(response, text='Rendered response page', count=1, status_code=200)
+
+    def test_ignored_path(self):
+        "A path is ignored when applying the maintanance mode and should be reachable normally"
+        mw.MAINTENANCE_MODE = True
+        mw.IGNORE_URLS = (
+            re.compile(r'^/ignored.*'),
+        )
+        settings.TEMPLATE_DIRS = (os.path.join(os.path.dirname(os.path.abspath(__file__)), '../templates/'),)
+
+        response = self.client.get('/ignored/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)

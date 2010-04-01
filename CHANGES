@@ -1,6 +1,13 @@
 Changes
 =======
 
+developement
+------------
+
+- Got rid of dependency on setuptools
+- Added ability to exclude specific paths from maintenance mode with the
+  ``MAINTENANCE_EXCLUDE_URLS`` setting.
+
 0.9.3
 -----
 - Minor documentation updates for the switch to github, expect more changes to follow soon.

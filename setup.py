@@ -1,14 +1,11 @@
-from ez_setup import use_setuptools
-use_setuptools()
-
 import os
-from setuptools import setup, find_packages
+from distutils.core import setup
 
 version = '0.9.3'
 
 def read_file(name):
-    return open(os.path.join(os.path.dirname(__file__), 
-                             name)).read()    
+    return open(os.path.join(os.path.dirname(__file__),
+                             name)).read()
 
 readme = read_file('README')
 changes = read_file('CHANGES')
@@ -24,7 +21,12 @@ setup(
     platforms = ["any"],
     url='https://github.com/shanx/django-maintenancemode',
     download_url='',
-    packages=['maintenancemode', 'maintenancemode.conf',  'maintenancemode.conf.urls', 'maintenancemode.views'],
+    packages=[
+        'maintenancemode',
+        'maintenancemode.conf',
+        'maintenancemode.conf.urls',
+        'maintenancemode.views',
+    ],
     include_package_data = False,
     classifiers=[
             'Development Status :: 4 - Beta',
@@ -36,5 +38,4 @@ setup(
             'Programming Language :: Python',
             'Topic :: Utilities',
     ],
-    zip_safe=False,
 )

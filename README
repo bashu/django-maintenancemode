@@ -40,10 +40,27 @@ Configuration
 If you do not configure the settings below in your own project settings.py,
 they assume default values:
 
-MAINTENANCE_MODE
-  Boolean. Enable/disable maintenance mode.
-  Default: False
- 
+``MAINTENANCE_MODE``
+--------------------
+
+:Default: ``False``
+
+Boolean. Enable/disable maintenance mode.
+
+``MAINTENANCE_IGNORE_URLS``
+---------------------------
+
+:Default: ``()``
+
+Sequence of URL path regexes to exclude from the maintenance mode.
+
+Example::
+
+    MAINTENANCE_IGNORE_URLS = (
+        r'^/docs/.*',
+        r'^/contact'
+    )
+
 Some observations:
 
 * If user is logged in and staff member, the maintenance page is

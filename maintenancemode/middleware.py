@@ -19,7 +19,7 @@ class MaintenanceModeMiddleware(object):
         # Allow access if remote ip is in INTERNAL_IPS
         if request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return None
-        
+
         # Allow access if the user doing the request is logged in and a
         # staff member.
         if hasattr(request, 'user') and request.user.is_staff:

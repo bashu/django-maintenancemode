@@ -36,7 +36,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_enabled_middleware_with_template(self):
         "Enabling the middleware having a 503.html in any of the template locations should return the rendered template"
         mw.MAINTENANCE_MODE = True
-        settings.TEMPLATE_DIRS = (os.path.join(os.path.dirname(os.path.abspath(__file__)), '../templates/'),)
+        settings.TEMPLATE_DIRS = (settings.TEST_TEMPLATE_DIR,)
 
         response = self.client.get('/')
         self.assertContains(response, text='Temporary unavailable', count=1, status_code=503)
@@ -44,7 +44,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_middleware_with_non_staff_user(self):
         "A logged in user that is not a staff user should see the 503 message"
         mw.MAINTENANCE_MODE = True
-        settings.TEMPLATE_DIRS = (os.path.join(os.path.dirname(os.path.abspath(__file__)), '../templates/'),)
+        settings.TEMPLATE_DIRS = (settings.TEST_TEMPLATE_DIR,)
 
         from django.contrib.auth.models import User
         User.objects.create_user(username='maintenance', email='maintenance@example.org', password='maintenance_pw')
@@ -57,7 +57,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_middleware_with_staff_user(self):
         "A logged in user that _is_ a staff user should be able to use the site normally"
         mw.MAINTENANCE_MODE = True
-        settings.TEMPLATE_DIRS = (os.path.join(os.path.dirname(os.path.abspath(__file__)), '../templates/'),)
+        settings.TEMPLATE_DIRS = (settings.TEST_TEMPLATE_DIR,)
 
         from django.contrib.auth.models import User
         user = User.objects.create_user(username='maintenance', email='maintenance@example.org', password='maintenance_pw')
@@ -86,7 +86,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
         mw.IGNORE_URLS = (
             re.compile(r'^/ignored.*'),
         )
-        settings.TEMPLATE_DIRS = (os.path.join(os.path.dirname(os.path.abspath(__file__)), '../templates/'),)
+        settings.TEMPLATE_DIRS = (settings.TEST_TEMPLATE_DIR,)
 
         response = self.client.get('/ignored/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)

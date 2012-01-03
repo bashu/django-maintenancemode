@@ -24,7 +24,9 @@ setup(
     packages=[
         'maintenancemode',
         'maintenancemode.conf',
+        'maintenancemode.conf.settings',
         'maintenancemode.conf.urls',
+        'maintenancemode.tests',
         'maintenancemode.views',
     ],
     include_package_data = False,

@@ -17,3 +17,4 @@ downloads/*
 .installed.cfg
 bin/*
 develop-eggs/*.egg-link
+.tox/

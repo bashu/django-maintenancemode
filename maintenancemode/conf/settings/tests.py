@@ -20,9 +20,7 @@ else:
 
 SITE_ID = 1
 
-TEMPLATE_DIRS = (
-    os.path.join(TEST_ROOT, os.pardir, os.pardir, 'tests', 'templates'),
-)
+TEST_TEMPLATE_DIR = os.path.join(TEST_ROOT, os.pardir, os.pardir, 'tests', 'templates')
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

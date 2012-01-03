@@ -4,11 +4,11 @@ use_setuptools()
 import os
 from setuptools import setup, find_packages
 
-version = '0.9.3'
+version = '0.9.3.1'
 
 def read_file(name):
-    return open(os.path.join(os.path.dirname(__file__), 
-                             name)).read()    
+    return open(os.path.join(os.path.dirname(__file__),
+                             name)).read()
 
 readme = read_file('README')
 changes = read_file('CHANGES')

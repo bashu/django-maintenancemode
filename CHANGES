@@ -1,6 +1,10 @@
 Changes
 =======
 
+0.9.3
+-----
+- Minor documentation updates for the switch to github, expect more changes to follow soon.
+
 0.9.2
 -----
 - Fixed an issue with setuptools, thanks for reporting this ksato9700

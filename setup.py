@@ -1,7 +1,7 @@
 import os
 from distutils.core import setup
 
-version = '0.9.3'
+version = '0.9.3.1'
 
 here = os.path.abspath(os.path.dirname(__file__))
 

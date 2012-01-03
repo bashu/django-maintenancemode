@@ -2,4 +2,4 @@ include AUTHORS
 include CHANGES
 include LICENSE
 include README.rst
-include maintenancemode/tests/templates *.html
+recursive-include maintenancemode/tests/templates *.html

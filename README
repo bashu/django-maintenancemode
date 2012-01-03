@@ -14,7 +14,7 @@ Installation
 ============
 
 * Download django-maintenancemode from http://pypi.python.org/pypi/django-maintenancemode
-  or http://code.google.com/p/django-maintenancemode/
+  or https://github.com/shanx/django-maintenancemode
 * Install using: `python setup.py install`
 * In your Django settings file add maintenancemode to your MIDDLEWARE_CLASSES.
   Make sure it comes after Django's AuthenticationMiddleware. Like so::

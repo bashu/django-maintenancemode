@@ -1,0 +1,22 @@
+Changes
+=======
+
+0.9.2
+-----
+- Fixed an issue with setuptools, thanks for reporting this ksato9700
+
+0.9.1
+-----
+
+- Tested django-maintenancemode with django-1.0 release (following the 1.0.X release branch)
+- Bundled buildout.cfg and bootstrap with the source version of the project, allowing repeatable buildout
+- The middleware now uses its own default config file, thanks to a patch by semente
+- Use INTERNAL_IPS to check for users that need access. user.is_staff will stay in place for backwards incompatibility. Thanks for the idea Joshua Works
+- Have setup.py sdist only distribute maintenancemode itself, no longer distribute tests and buildout stuff
+- Use README and CHANGES in setup.py's long_description, stolen from Jeroen's djangorecipe :)
+- Updated the documentation and now use pypi as the documentation source (link there from google code)
+
+0.9
+-----
+
+First release

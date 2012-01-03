@@ -12,8 +12,12 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def setUp(self):
         # Reset config options adapted in the individual tests
         mw.MAINTENANCE_MODE = False
+        self.old_template_dirs = settings.TEMPLATE_DIRS
         settings.TEMPLATE_DIRS = ()
         settings.INTERNAL_IPS = ()
+
+    def tearDown(self):
+        settings.TEMPLATE_DIRS = self.old_template_dirs
 
     def test_implicitly_disabled_middleware(self):
         "Middleware should default to being disabled"
@@ -30,13 +34,13 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_enabled_middleware_without_template(self):
         "Enabling the middleware without a proper 503 template should raise a template error"
         mw.MAINTENANCE_MODE = True
+        settings.TEMPLATE_DIRS = ()
 
         self.assertRaises(TemplateDoesNotExist, self.client.get, '/')
 
     def test_enabled_middleware_with_template(self):
         "Enabling the middleware having a 503.html in any of the template locations should return the rendered template"
         mw.MAINTENANCE_MODE = True
-        settings.TEMPLATE_DIRS = (settings.TEST_TEMPLATE_DIR,)
 
         response = self.client.get('/')
         self.assertContains(response, text='Temporary unavailable', count=1, status_code=503)
@@ -45,7 +49,6 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_middleware_with_non_staff_user(self):
         "A logged in user that is not a staff user should see the 503 message"
         mw.MAINTENANCE_MODE = True
-        settings.TEMPLATE_DIRS = (settings.TEST_TEMPLATE_DIR,)
 
         from django.contrib.auth.models import User
         User.objects.create_user(username='maintenance', email='maintenance@example.org', password='maintenance_pw')
@@ -58,7 +61,6 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_middleware_with_staff_user(self):
         "A logged in user that _is_ a staff user should be able to use the site normally"
         mw.MAINTENANCE_MODE = True
-        settings.TEMPLATE_DIRS = (settings.TEST_TEMPLATE_DIR,)
 
         from django.contrib.auth.models import User
         user = User.objects.create_user(username='maintenance', email='maintenance@example.org', password='maintenance_pw')
@@ -87,7 +89,6 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
         mw.IGNORE_URLS = (
             re.compile(r'^/ignored.*'),
         )
-        settings.TEMPLATE_DIRS = (settings.TEST_TEMPLATE_DIR,)
 
         response = self.client.get('/ignored/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)

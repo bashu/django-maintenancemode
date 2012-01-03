@@ -40,6 +40,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
 
         response = self.client.get('/')
         self.assertContains(response, text='Temporary unavailable', count=1, status_code=503)
+        self.assertContains(response, text='You requested: /', count=1, status_code=503)
 
     def test_middleware_with_non_staff_user(self):
         "A logged in user that is not a staff user should see the 503 message"

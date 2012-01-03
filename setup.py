@@ -3,10 +3,10 @@ from distutils.core import setup
 
 version = '0.9.3'
 
+here = os.path.abspath(os.path.dirname(__file__))
 
 def read_file(name):
-    return open(os.path.join(os.path.dirname(__file__),
-                             name)).read()
+    return open(os.path.join(here, name)).read()
 
 readme = read_file('README.rst')
 changes = read_file('CHANGES')

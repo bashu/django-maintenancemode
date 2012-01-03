@@ -3,6 +3,7 @@ from distutils.core import setup
 
 version = '0.9.3'
 
+
 def read_file(name):
     return open(os.path.join(os.path.dirname(__file__),
                              name)).read()
@@ -17,10 +18,9 @@ setup(
     long_description='\n\n'.join([readme, changes]),
     author='Remco Wendt',
     author_email='remco@maykinmedia.nl',
-    license = "BSD",
-    platforms = ["any"],
+    license="BSD",
+    platforms=["any"],
     url='https://github.com/shanx/django-maintenancemode',
-    download_url='',
     packages=[
         'maintenancemode',
         'maintenancemode.conf',
@@ -29,7 +29,11 @@ setup(
         'maintenancemode.tests',
         'maintenancemode.views',
     ],
-    include_package_data = False,
+    package_data={
+        'maintenancemode': [
+            'tests/templates/503.html',
+        ],
+    },
     classifiers=[
             'Development Status :: 4 - Beta',
             'Environment :: Web Environment',

@@ -15,7 +15,7 @@ Installation
 
 * Download django-maintenancemode from http://pypi.python.org/pypi/django-maintenancemode
   or https://github.com/shanx/django-maintenancemode
-* Install using: `python setup.py install`
+* Install using: ``python setup.py install`` or your prefered installer
 * In your Django settings file add maintenancemode to your MIDDLEWARE_CLASSES.
   Make sure it comes after Django's AuthenticationMiddleware. Like so::
 
@@ -24,15 +24,14 @@ Installation
        'django.contrib.sessions.middleware.SessionMiddleware',
        'django.contrib.auth.middleware.AuthenticationMiddleware',
        'django.middleware.doc.XViewMiddleware',
-   
        'maintenancemode.middleware.MaintenanceModeMiddleware',
    )
 
 * django-maintenancemode works the same way as handling 404 or 500 error in
   Django work. It adds a handler503 which you can override in your main urls.py
   or you can add a 503.html to your templates directory.
-* In your Django settings file add a variable called MAINTENANCE_MODE. Setting
-  this variable to True activates the middleware.
+* In your Django settings file add a variable called ``MAINTENANCE_MODE``.
+  Setting this variable to ``True`` activates the middleware.
 
 
 Configuration

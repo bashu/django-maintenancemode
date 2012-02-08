@@ -19,3 +19,4 @@ bin/*
 develop-eggs/*.egg-link
 .tox/
 reports/
+.idea/

@@ -68,3 +68,10 @@ Some observations:
 
 * If user's ip is in INTERNAL_IPS, the maintenance page is
   not displayed.
+
+``MAINTENANCE_VIEW``
+--------------------
+
+:Default: ``maintenancemode.views.defaults.temporary_unavailable``
+
+String. View function for page generation if you need custom template engine like Jinja2 or some.

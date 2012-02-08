@@ -10,9 +10,10 @@ else:
     from django.conf import urls
 
 from maintenancemode.conf.settings.defaults import (MAINTENANCE_MODE,
-                                                    MAINTENANCE_IGNORE_URLS)
+                                                    MAINTENANCE_IGNORE_URLS,
+                                                    MAINTENANCE_VIEW)
 
-urls.handler503 = 'maintenancemode.views.defaults.temporary_unavailable'
+urls.handler503 = MAINTENANCE_VIEW
 urls.__all__.append('handler503')
 
 IGNORE_URLS = tuple([re.compile(url) for url in MAINTENANCE_IGNORE_URLS])

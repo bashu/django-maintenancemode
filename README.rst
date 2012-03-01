@@ -60,10 +60,22 @@ Example::
         r'^/contact'
     )
 
-Some observations:
+=================
+Some observations
+=================
 
 * If user is logged in and staff member, the maintenance page is
   not displayed.
 
-* If user's ip is in INTERNAL_IPS, the maintenance page is
+* If user's IP is in ``INTERNAL_IPS``, the maintenance page is
   not displayed.
+
+* To override the default view which is used if the maintenance mode
+  is enabled you can simply define a ``handler503`` variable in your
+  ROOT_URLCONF_, similar to how you would customize other `error handlers`_,
+  e.g.::
+
+      handler503 = 'mysite.views.maintenance_mode'
+
+.. _ROOT_URLCONF: https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
+.. _`404 handler`: https://docs.djangoproject.com/en/dev/topics/http/views/#customizing-error-views

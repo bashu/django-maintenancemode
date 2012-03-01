@@ -60,7 +60,6 @@ Example::
         r'^/contact'
     )
 
-=================
 Some observations
 =================
 

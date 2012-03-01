@@ -6,7 +6,7 @@ developement
 
 - Got rid of dependency on setuptools
 - Added ability to exclude specific paths from maintenance mode with the
-  ``MAINTENANCE_EXCLUDE_URLS`` setting.
+  ``MAINTENANCE_IGNORE_URLS`` setting.
 - Use RequestContext when rending the ``503.html`` template.
 - Use tox for running the tests instead of buildout.
 - Made sure the app runs on Django 1.4.

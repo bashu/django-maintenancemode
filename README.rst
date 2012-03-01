@@ -77,4 +77,4 @@ Some observations
       handler503 = 'mysite.views.maintenance_mode'
 
 .. _ROOT_URLCONF: https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
-.. _`404 handler`: https://docs.djangoproject.com/en/dev/topics/http/views/#customizing-error-views
+.. _`error handlers`: https://docs.djangoproject.com/en/dev/topics/http/views/#customizing-error-views

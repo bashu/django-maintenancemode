@@ -1,8 +1,8 @@
 Changes
 =======
 
-developement
-------------
+0.10
+----
 
 - Got rid of dependency on setuptools
 - Added ability to exclude specific paths from maintenance mode with the

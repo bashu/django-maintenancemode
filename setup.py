@@ -1,21 +1,30 @@
 import os
+import re
+import codecs
 from distutils.core import setup
-
-version = '0.9.3.1'
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-def read_file(name):
-    return open(os.path.join(here, name)).read()
 
-readme = read_file('README.rst')
-changes = read_file('CHANGES')
+def read(*parts):
+    return codecs.open(os.path.join(here, *parts)).read()
+
+
+def find_version(*path_parts):
+    version_file = read(*path_parts)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
+                              version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
+
 
 setup(
     name='django-maintenancemode',
-    version=version,
-    description='Django-maintenancemode allows you to temporary shutdown your site for maintenance work',
-    long_description='\n\n'.join([readme, changes]),
+    version=find_version('maintenancemode', '__init__.py'),
+    description=('Django-maintenancemode allows you to '
+                 'temporary shutdown your site for maintenance work'),
+    long_description='\n\n'.join([read('README.rst'), read('CHANGES')]),
     author='Remco Wendt',
     author_email='remco@maykinmedia.nl',
     license="BSD",

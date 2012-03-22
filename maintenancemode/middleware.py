@@ -24,8 +24,15 @@ class MaintenanceModeMiddleware(object):
         if not MAINTENANCE_MODE:
             return None
 
+        # Preferentially check HTTP_X_FORWARDED_FOR b/c a proxy server might have obscured REMOTE_ADDR
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
+        if x_forwarded_for:
+            remote_addr = x_forwarded_for.split(',')[0].strip()
+        else:
+            remote_addr = request.META.get('REMOTE_ADDR', None)
+
         # Allow access if remote ip is in INTERNAL_IPS
-        if request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
+        if remote_addr in settings.INTERNAL_IPS:
             return None
 
         # Allow access if the user doing the request is logged in and a

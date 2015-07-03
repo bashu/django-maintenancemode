@@ -96,5 +96,10 @@ There are various optional configuration options you can set in your ``settings.
         r'^/contact'
     )
 
+License
+-------
+
+``django-maintenancemode`` is released under the BSD license.
+
 .. _ROOT_URLCONF: https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
 .. _`error handlers`: https://docs.djangoproject.com/en/dev/topics/http/views/#customizing-error-views

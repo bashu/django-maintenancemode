@@ -13,6 +13,7 @@ else:
 from .conf import settings
 
 urls.handler503 = 'maintenancemode.views.temporary_unavailable'
+urls.__all__.append('handler503')
 
 IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
 

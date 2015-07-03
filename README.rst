@@ -16,12 +16,12 @@ Authored by `Remco Wendt <https://github.com/shanx>`_, and some great `contribut
 .. image:: https://img.shields.io/pypi/dm/django-maintenancemode.svg
     :target: https://pypi.python.org/pypi/django-maintenancemode/
 
-.. image:: https://img.shields.io/github/license/adamcharnock/django-maintenancemode.svg
+.. image:: https://img.shields.io/github/license/shanx/django-maintenancemode.svg
     :target: https://pypi.python.org/pypi/django-maintenancemode/
 
-.. image:: https://img.shields.io/travis/adamcharnock/django-maintenancemode.svg
-    :target: https://travis-ci.org/adamcharnock/django-maintenancemode/
-             
+.. image:: https://img.shields.io/travis/shanx/django-maintenancemode.svg
+    :target: https://travis-ci.org/shanx/django-maintenancemode/
+
 How it works
 ------------
 

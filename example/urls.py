@@ -1,6 +1,6 @@
 import django
 
-if django.VERSION < (1, 3):
+if django.VERSION < (1, 4):
     from django.conf.urls.defaults import *
 else:
     from django.conf.urls import *

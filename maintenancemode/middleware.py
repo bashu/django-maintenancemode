@@ -1,38 +1,37 @@
+# -*- coding: utf-8 -*-
+
 import re
+
 import django
-from django.conf import settings
 from django.core import urlresolvers
 
-
-if django.VERSION[:2] <= (1, 3):
+if django.VERSION < (1, 3):
     from django.conf.urls import defaults as urls
 else:
     from django.conf import urls
 
-from maintenancemode.conf.settings.defaults import (MAINTENANCE_MODE,
-                                                    MAINTENANCE_IGNORE_URLS)
+from .conf import settings
 
-urls.handler503 = 'maintenancemode.views.defaults.temporary_unavailable'
-urls.__all__.append('handler503')
+urls.handler503 = 'maintenancemode.views.temporary_unavailable'
 
-IGNORE_URLS = tuple([re.compile(url) for url in MAINTENANCE_IGNORE_URLS])
+IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
 
 
 class MaintenanceModeMiddleware(object):
+
     def process_request(self, request):
         # Allow access if middleware is not activated
-        if not MAINTENANCE_MODE:
+        if not settings.MAINTENANCE_MODE:
             return None
 
-        # Preferentially check HTTP_X_FORWARDED_FOR b/c a proxy server might have obscured REMOTE_ADDR
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
-        if x_forwarded_for:
-            remote_addr = x_forwarded_for.split(',')[0].strip()
-        else:
-            remote_addr = request.META.get('REMOTE_ADDR', None)
+        # Preferentially check HTTP_X_FORWARDED_FOR b/c a proxy
+        # server might have obscured REMOTE_ADDR
+        for ip in request.META.get('HTTP_X_FORWARDED_FOR', '').split(','):
+            if ip.strip() in settings.INTERNAL_IPS:
+                return None
 
         # Allow access if remote ip is in INTERNAL_IPS
-        if remote_addr in settings.INTERNAL_IPS:
+        if request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
             return None
 
         # Allow access if the user doing the request is logged in and a
@@ -48,5 +47,9 @@ class MaintenanceModeMiddleware(object):
         # Otherwise show the user the 503 page
         resolver = urlresolvers.get_resolver(None)
 
-        callback, param_dict = resolver._resolve_special('503')
+        if django.VERSION < (1, 8):
+            callback, param_dict = resolver._resolve_special('503')
+        else:
+            callback, param_dict = resolver.resolve_error_handler('503')
+
         return callback(request, **param_dict)

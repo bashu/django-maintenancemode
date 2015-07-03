@@ -1,56 +1,45 @@
 import os
-import re
-import codecs
 from distutils.core import setup
 
-here = os.path.abspath(os.path.dirname(__file__))
+README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
 
+# allow setup.py to be run from any path
+os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
-def read(*parts):
-    return codecs.open(os.path.join(here, *parts)).read()
-
-
-def find_version(*path_parts):
-    version_file = read(*path_parts)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
-                              version_file, re.M)
-    if version_match:
-        return version_match.group(1)
-    raise RuntimeError("Unable to find version string.")
-
+from maintenancemode import __version__
 
 setup(
     name='django-maintenancemode',
-    version=find_version('maintenancemode', '__init__.py'),
-    description=('Django-maintenancemode allows you to '
-                 'temporary shutdown your site for maintenance work'),
-    long_description='\n\n'.join([read('README.rst'), read('CHANGES')]),
-    author='Remco Wendt',
-    author_email='remco@maykinmedia.nl',
-    license="BSD",
-    platforms=["any"],
-    url='https://github.com/shanx/django-maintenancemode',
+    version=__version__,
     packages=[
         'maintenancemode',
-        'maintenancemode.conf',
-        'maintenancemode.conf.settings',
-        'maintenancemode.conf.urls',
-        'maintenancemode.tests',
-        'maintenancemode.views',
     ],
-    package_data={
-        'maintenancemode': [
-            'tests/templates/503.html',
-        ],
-    },
+    include_package_data=True,
+    license='BSD License',
+    description="Django-maintenancemode allows you to temporary shutdown your site for maintenance work",
+    long_description=README,
+    url='https://github.com/shanx/django-maintenancemode',
+    author='Remco Wendt',
+    author_email='remco@maykinmedia.nl',
+    maintainer='Basil Shubin',
+    maintainer_email='basil.shubin@gmail.com',
+    install_requires=[
+        'django',
+        'django-appconf',
+    ],    
     classifiers=[
-            'Development Status :: 4 - Beta',
-            'Environment :: Web Environment',
-            'Framework :: Django',
-            'Intended Audience :: Developers',
-            'License :: OSI Approved :: BSD License',
-            'Operating System :: OS Independent',
-            'Programming Language :: Python',
-            'Topic :: Utilities',
+        'Environment :: Web Environment',
+        'Framework :: Django',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',        
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
+    zip_safe=False,
 )

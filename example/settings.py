@@ -84,9 +84,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-## Maintenance settings
-
+# Enable / disable maintenance mode.
+# Default: False
 MAINTENANCE_MODE = True
+
+# Sequence of URL path regexes to exclude from the maintenance mode.
+# Default: ()
 MAINTENANCE_IGNORE_URLS = (
     re.compile(r'^/ignored.*'),
 )

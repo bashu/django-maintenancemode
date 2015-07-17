@@ -88,7 +88,6 @@ There are various optional configuration options you can set in your ``settings.
     # Default: False
     MAINTENANCE_MODE = True
     
-
     # Sequence of URL path regexes to exclude from the maintenance mode.
     # Default: ()
     MAINTENANCE_IGNORE_URLS = (

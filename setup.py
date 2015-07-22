@@ -16,7 +16,7 @@ setup(
     ],
     include_package_data=True,
     license='BSD License',
-    description="Django-maintenancemode allows you to temporary shutdown your site for maintenance work",
+    description="django-maintenancemode allows you to temporary shutdown your site for maintenance work",
     long_description=README,
     url='https://github.com/shanx/django-maintenancemode',
     author='Remco Wendt',

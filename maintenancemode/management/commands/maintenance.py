@@ -12,7 +12,7 @@ class Command(BaseCommand):
         parser.add_argument('mode', nargs='?', help='<on|off>')
 
     def handle(self, *args, **options):
-        mode = options.get('mode', None)
+        mode = options.get('mode', args[0] if len(args) > 0 else None)
         if mode is not None:
             if mode.lower() in ['on', 'yes', 'true', '1']:
                 set_maintenance_mode(True)

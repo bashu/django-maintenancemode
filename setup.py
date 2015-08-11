@@ -13,6 +13,7 @@ setup(
     version=__version__,
     packages=[
         'maintenancemode',
+        'maintenancemode.management.commands',
     ],
     include_package_data=True,
     license='BSD License',

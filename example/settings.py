@@ -84,7 +84,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MAINTENANCE_MODE = True
+MAINTENANCE_MODE = True  # or ``False`` and use ``maintenance`` command
 MAINTENANCE_IGNORE_URLS = (
     re.compile(r'^/ignored.*'),
 )

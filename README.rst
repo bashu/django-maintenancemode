@@ -70,6 +70,12 @@ Installation
 
        MAINTENANCE_MODE = True  # Setting this variable to ``True`` activates the middleware.
 
+   or set ``MAINTENANCE_MODE`` to ``False`` and use ``maintenance`` command:
+
+   .. code-block:: shell
+
+       python ./manage.py maintenance <on|off>
+
 Please see ``example`` application. This application is used to
 manually test the functionalities of this package. This also serves as
 a good example...
@@ -86,7 +92,7 @@ There are various optional configuration options you can set in your ``settings.
 
     # Enable / disable maintenance mode.
     # Default: False
-    MAINTENANCE_MODE = True
+    MAINTENANCE_MODE = True  # or ``False`` and use ``maintenance`` command
     
     # Sequence of URL path regexes to exclude from the maintenance mode.
     # Default: ()

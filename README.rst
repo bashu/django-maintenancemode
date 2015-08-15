@@ -5,7 +5,7 @@ django-maintenancemode is a middleware that allows you to temporary shutdown
 your site for maintenance work.
 
 Logged in users having staff credentials can still fully use
-the site as can users visiting the site from an ip address defined in
+the site as can users visiting the site from an IP address defined in
 Django's ``INTERNAL_IPS``.
 
 Authored by `Remco Wendt <https://github.com/shanx>`_, and some great `contributors <https://github.com/shanx/django-maintenancemode/contributors>`_.

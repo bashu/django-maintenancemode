@@ -1,7 +1,8 @@
 import os
-from distutils.core import setup
+import codecs
+from setuptools import setup, find_packages
 
-README = open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+README = codecs.open(os.path.join(os.path.dirname(__file__), 'README.rst'), encoding='utf-8').read()
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
@@ -11,12 +12,10 @@ from maintenancemode import __version__
 setup(
     name='django-maintenancemode',
     version=__version__,
-    packages=[
-        'maintenancemode',
-    ],
+    packages=find_packages(exclude=['example']),
     include_package_data=True,
     license='BSD License',
-    description="Django-maintenancemode allows you to temporary shutdown your site for maintenance work",
+    description="django-maintenancemode allows you to temporary shutdown your site for maintenance work",
     long_description=README,
     url='https://github.com/shanx/django-maintenancemode',
     author='Remco Wendt',
@@ -28,9 +27,11 @@ setup(
         'django-appconf',
     ],    
     classifiers=[
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
+        'Intended Audience :: System Administrators',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',

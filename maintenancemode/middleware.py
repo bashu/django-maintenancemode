@@ -11,6 +11,7 @@ else:
     from django.conf import urls
 
 from .conf import settings
+from .utils import get_maintenance_mode
 
 urls.handler503 = 'maintenancemode.views.temporary_unavailable'
 urls.__all__.append('handler503')
@@ -22,7 +23,7 @@ class MaintenanceModeMiddleware(object):
 
     def process_request(self, request):
         # Allow access if middleware is not activated
-        if not settings.MAINTENANCE_MODE:
+        if not (settings.MAINTENANCE_MODE or get_maintenance_mode()):
             return None
 
         # Preferentially check HTTP_X_FORWARDED_FOR b/c a proxy

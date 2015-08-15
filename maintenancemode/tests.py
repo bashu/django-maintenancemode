@@ -2,7 +2,9 @@ import re
 import os.path
 
 from django.conf import settings
+from django.core import management
 from django.http import HttpResponse
+from django.utils.six import StringIO
 from django.contrib.auth.models import User
 from django.template import TemplateDoesNotExist
 
@@ -15,6 +17,7 @@ except ImportError:  # django < 1.4
     from django.conf.urls.defaults import patterns, url
 
 from maintenancemode import middleware as mw
+from maintenancemode.utils import set_maintenance_mode
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -36,6 +39,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
         # Reset config options adapted in the individual tests
         self.old_MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
         settings.MAINTENANCE_MODE = False
+        set_maintenance_mode(False)
 
         settings.TEMPLATE_DIRS = ()
         settings.INTERNAL_IPS = ()
@@ -109,3 +113,13 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
             with self.settings(IGNORE_URLS=(re.compile(r'^/ignored.*'),)):
                 response = self.client.get('/ignored/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)
+
+    def test_management_command(self):
+        out = StringIO()
+        # Explicitly disabling the ``MAINTENANCE_MODE``
+        with self.settings(MAINTENANCE_MODE=False):
+            management.call_command('maintenance', 'on', stdout=out)
+            self.assertRaises(TemplateDoesNotExist, self.client.get, '/')
+
+            management.call_command('maintenance', 'off', stdout=out)
+            self.assertContains(self.client.get('/'), text='Rendered response page', count=1, status_code=200)

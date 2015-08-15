@@ -54,7 +54,7 @@ Installation
 
        pip install django-maintenancemode
 
-2. Add ``maintenancemode`` to your `INSTALLED_APPS` :
+2. Add ``maintenancemode`` to your ``INSTALLED_APPS`` :
 
    .. code-block:: python
 

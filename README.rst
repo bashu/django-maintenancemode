@@ -54,7 +54,16 @@ Installation
 
        pip install django-maintenancemode
 
-2. Add ``MaintenanceModeMiddleware`` to ``MIDDLEWARE_CLASSES``, make sure it comes after ``AuthenticationMiddleware`` :
+2. Add ``maintenancemode`` to your `INSTALLED_APPS` :
+
+   .. code-block:: python
+
+       INSTALLED_APPS = (
+           ...
+           'maintenancemode',
+       )
+
+3. Add ``MaintenanceModeMiddleware`` to ``MIDDLEWARE_CLASSES``, make sure it comes after ``AuthenticationMiddleware`` :
 
    .. code-block:: python
 
@@ -64,13 +73,13 @@ Installation
            'maintenancemode.middleware.MaintenanceModeMiddleware',
        )                
 
-3. Add variable called ``MAINTENANCE_MODE`` in your project's ``settings.py`` file:
+4. Add variable called ``MAINTENANCE_MODE`` in your project's ``settings.py`` file :
 
    .. code-block:: python
 
        MAINTENANCE_MODE = True  # Setting this variable to ``True`` activates the middleware.
 
-   or set ``MAINTENANCE_MODE`` to ``False`` and use ``maintenance`` command:
+   or set ``MAINTENANCE_MODE`` to ``False`` and use ``maintenance`` command :
 
    .. code-block:: shell
 

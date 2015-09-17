@@ -2,24 +2,28 @@
 
 from django.core.management.base import BaseCommand, CommandError
 
-from maintenancemode.utils import set_maintenance_mode
+from maintenancemode import utils as maintenance
 
 
 class Command(BaseCommand):
-    help = 'Turn on / turn off maintenance mode state.'
+    opts = ('on', 'off', 'activate', 'deactivate')
 
     def add_arguments(self, parser):
-        parser.add_argument('mode', nargs='?', help='<on|off>')
+        parser.add_argument('command', nargs='?', help='|'.join(self.opts))
 
     def handle(self, *args, **options):
-        mode = options.get('mode', args[0] if len(args) > 0 else None)
-        if mode is not None:
-            if mode.lower() in ['on', 'yes', 'true', '1']:
-                set_maintenance_mode(True)
-                return
-                
-            elif mode.lower() in ['off', 'no', 'false', '0']:
-                set_maintenance_mode(False)
-                return
+        verbosity = options.get('verbosity')
+        command = options.get('command', args[0] if len(args) > 0 else None)
 
-        raise CommandError("Usage is maintenance <on|off>")
+        if command is not None:
+            if command.lower() in ('on', 'activate'):
+                maintenance.activate()
+                if verbosity > 0:
+                    self.stdout.write('Maintenance mode was activated succesfully')
+            elif command.lower() in ('off', 'deactivate'):
+                maintenance.deactivate()
+                if verbosity > 0:
+                    self.stdout.write('Maintenance mode was deactivated succesfully')
+
+        if command not in self.opts:
+            raise CommandError('Allowed commands are: %s' % '|'.join(self.opts))

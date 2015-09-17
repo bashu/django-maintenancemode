@@ -12,8 +12,8 @@ class Command(BaseCommand):
         parser.add_argument('command', nargs='?', help='|'.join(self.opts))
 
     def handle(self, *args, **options):
-        verbosity = options.get('verbosity')
         command = options.get('command', args[0] if len(args) > 0 else None)
+        verbosity = int(options.get('verbosity'))
 
         if command is not None:
             if command.lower() in ('on', 'activate'):

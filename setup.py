@@ -1,31 +1,71 @@
+#!/usr/bin/env python
+
 import os
+import re
+import sys
 import codecs
+import subprocess
+
 from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
 
-README = codecs.open(os.path.join(os.path.dirname(__file__), 'README.rst'), encoding='utf-8').read()
 
-# allow setup.py to be run from any path
-os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
+class TestRunner(TestCommand):
+    user_options = []
 
-from maintenancemode import __version__
+    def run(self):
+        raise SystemExit(subprocess.call([sys.executable, 'runtests.py']))
+
+
+def read(*parts):
+    file_path = os.path.join(os.path.dirname(__file__), *parts)
+    return codecs.open(file_path, encoding='utf-8').read()
+
+
+def find_version(*parts):
+    version_file = read(*parts)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    if version_match:
+        return str(version_match.group(1))
+    raise RuntimeError("Unable to find version string.")
+
 
 setup(
     name='django-maintenancemode',
-    version=__version__,
-    packages=find_packages(exclude=['example']),
-    include_package_data=True,
+    version=find_version('maintenancemode', '__init__.py'),
     license='BSD License',
+
+    install_requires=[
+        'django>=1.4.2',
+        'django-appconf',
+        'ipy',
+    ],
+    requires=[
+        'Django (>=1.4.2)',
+    ],
+
     description="django-maintenancemode allows you to temporary shutdown your site for maintenance work",
-    long_description=README,
-    url='https://github.com/shanx/django-maintenancemode',
+    long_description=read('README.rst'),
+
     author='Remco Wendt',
     author_email='remco@maykinmedia.nl',
+    
     maintainer='Basil Shubin',
     maintainer_email='basil.shubin@gmail.com',
-    install_requires=[
-        'django',
-        'django-appconf',
-    ],    
+
+    url='http://github.com/shanx/django-maintenancemode',
+    download_url='https://github.com/shanx/django-maintenancemode/zipball/master',
+
+    packages=find_packages(exclude=('example*', '*.tests*')),
+    include_package_data=True,
+
+    tests_require=[
+    ],
+    cmdclass={
+        'test': TestRunner,
+    },
+
+    zip_safe=False,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -42,5 +82,4 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
-    zip_safe=False,
 )

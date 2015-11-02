@@ -11,7 +11,7 @@ else:
     from django.conf import urls
 
 from .conf import settings
-from .utils import get_maintenance_mode
+from . import utils as maintenance
 
 urls.handler503 = 'maintenancemode.views.temporary_unavailable'
 urls.__all__.append('handler503')
@@ -23,17 +23,19 @@ class MaintenanceModeMiddleware(object):
 
     def process_request(self, request):
         # Allow access if middleware is not activated
-        if not (settings.MAINTENANCE_MODE or get_maintenance_mode()):
+        if not (settings.MAINTENANCE_MODE or maintenance.status()):
             return None
+
+        INTERNAL_IPS = maintenance.IPList(settings.INTERNAL_IPS)
 
         # Preferentially check HTTP_X_FORWARDED_FOR b/c a proxy
         # server might have obscured REMOTE_ADDR
         for ip in request.META.get('HTTP_X_FORWARDED_FOR', '').split(','):
-            if ip.strip() in settings.INTERNAL_IPS:
+            if ip.strip() in INTERNAL_IPS:
                 return None
 
         # Allow access if remote ip is in INTERNAL_IPS
-        if request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
+        if request.META.get('REMOTE_ADDR') in INTERNAL_IPS:
             return None
 
         # Allow access if the user doing the request is logged in and a

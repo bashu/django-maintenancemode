@@ -16,8 +16,8 @@ try:
 except ImportError:  # django < 1.4
     from django.conf.urls.defaults import patterns, url
 
+from maintenancemode import utils
 from maintenancemode import middleware as mw
-from maintenancemode.utils import set_maintenance_mode
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -39,7 +39,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
         # Reset config options adapted in the individual tests
         self.old_MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
         settings.MAINTENANCE_MODE = False
-        set_maintenance_mode(False)
+        utils.deactivate()  # make sure maintenance mode is off
 
         settings.TEMPLATE_DIRS = ()
         settings.INTERNAL_IPS = ()
@@ -103,6 +103,13 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
         client = Client(REMOTE_ADDR='127.0.0.1')
 
         with self.settings(MAINTENANCE_MODE=True, INTERNAL_IPS=('127.0.0.1', )):
+            response = client.get('/')
+        self.assertContains(response, text='Rendered response page', count=1, status_code=200)
+
+    def test_middleware_with_internal_ips_range(self):
+        client = Client(REMOTE_ADDR='10.10.10.1')
+
+        with self.settings(MAINTENANCE_MODE=True, INTERNAL_IPS=('10.10.10.0/24', )):
             response = client.get('/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)
 

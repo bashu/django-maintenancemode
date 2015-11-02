@@ -5,7 +5,7 @@ django-maintenancemode is a middleware that allows you to temporary shutdown
 your site for maintenance work.
 
 Logged in users having staff credentials can still fully use
-the site as can users visiting the site from an ip address defined in
+the site as can users visiting the site from an IP address defined in
 Django's ``INTERNAL_IPS``.
 
 Authored by `Remco Wendt <https://github.com/shanx>`_, and some great `contributors <https://github.com/shanx/django-maintenancemode/contributors>`_.
@@ -54,7 +54,16 @@ Installation
 
        pip install django-maintenancemode
 
-2. Add ``MaintenanceModeMiddleware`` to ``MIDDLEWARE_CLASSES``, make sure it comes after ``AuthenticationMiddleware`` :
+2. Add ``maintenancemode`` to your ``INSTALLED_APPS`` :
+
+   .. code-block:: python
+
+       INSTALLED_APPS = (
+           ...
+           'maintenancemode',
+       )
+
+3. Add ``MaintenanceModeMiddleware`` to ``MIDDLEWARE_CLASSES``, make sure it comes after ``AuthenticationMiddleware`` :
 
    .. code-block:: python
 
@@ -64,13 +73,13 @@ Installation
            'maintenancemode.middleware.MaintenanceModeMiddleware',
        )                
 
-3. Add variable called ``MAINTENANCE_MODE`` in your project's ``settings.py`` file:
+4. Add variable called ``MAINTENANCE_MODE`` in your project's ``settings.py`` file :
 
    .. code-block:: python
 
        MAINTENANCE_MODE = True  # Setting this variable to ``True`` activates the middleware.
 
-   or set ``MAINTENANCE_MODE`` to ``False`` and use ``maintenance`` command:
+   or set ``MAINTENANCE_MODE`` to ``False`` and use ``maintenance`` command :
 
    .. code-block:: shell
 

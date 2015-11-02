@@ -2,18 +2,42 @@
 
 import os
 
-from maintenancemode.conf import settings
+from .conf import settings
 
 
-def get_maintenance_mode():
-    return os.path.isfile(settings.MAINTENANCE_LOCKFILE_PATH)
+class IPList(list):
+    """Stolen from https://djangosnippets.org/snippets/1362/"""
 
-def set_maintenance_mode(value):
-    if value is True:
+    def __init__(self, ips):
         try:
-            open(settings.MAINTENANCE_LOCKFILE_PATH, 'ab', 0).close()
-        except OSError:
-            pass  # shit happens
+            from IPy import IP
+            for ip in ips:
+                self.append(IP(ip))
+        except ImportError:
+            pass
 
-    if value is False and get_maintenance_mode():
+    def __contains__(self, ip):
+        try:
+            for net in self:
+                if ip in net:
+                    return True
+        except:
+            pass
+        return False
+
+
+def activate():
+    try:
+        open(settings.MAINTENANCE_LOCKFILE_PATH, 'ab', 0).close()
+    except OSError:
+        pass  # shit happens
+
+
+def deactivate():
+    if os.path.isfile(settings.MAINTENANCE_LOCKFILE_PATH):
         os.remove(settings.MAINTENANCE_LOCKFILE_PATH)
+
+
+def status():
+    return settings.MAINTENANCE_MODE or os.path.isfile(
+        settings.MAINTENANCE_LOCKFILE_PATH)

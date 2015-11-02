@@ -16,12 +16,12 @@ Next, you can setup the django instance using :
 
 .. code-block:: bash
 
-    env PYTHONPATH=`pwd` python example/manage.py syncdb --noinput
+    python example/manage.py syncdb --noinput
 
 And run it :
 
 .. code-block:: bash
 
-    env PYTHONPATH=`pwd` python example/manage.py runserver
+    python example/manage.py runserver
 
 Good luck!

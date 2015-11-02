@@ -26,14 +26,16 @@ class MaintenanceModeMiddleware(object):
         if not (settings.MAINTENANCE_MODE or maintenance.status()):
             return None
 
+        INTERNAL_IPS = maintenance.IPList(settings.INTERNAL_IPS)
+
         # Preferentially check HTTP_X_FORWARDED_FOR b/c a proxy
         # server might have obscured REMOTE_ADDR
         for ip in request.META.get('HTTP_X_FORWARDED_FOR', '').split(','):
-            if ip.strip() in settings.INTERNAL_IPS:
+            if ip.strip() in INTERNAL_IPS:
                 return None
 
         # Allow access if remote ip is in INTERNAL_IPS
-        if request.META.get('REMOTE_ADDR') in settings.INTERNAL_IPS:
+        if request.META.get('REMOTE_ADDR') in INTERNAL_IPS:
             return None
 
         # Allow access if the user doing the request is logged in and a

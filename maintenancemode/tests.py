@@ -106,6 +106,13 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
             response = client.get('/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)
 
+    def test_middleware_with_internal_ips_range(self):
+        client = Client(REMOTE_ADDR='10.10.10.1')
+
+        with self.settings(MAINTENANCE_MODE=True, INTERNAL_IPS=('10.10.10.0/24', )):
+            response = client.get('/')
+        self.assertContains(response, text='Rendered response page', count=1, status_code=200)
+
     def test_ignored_path(self):
         # A path is ignored when applying the maintanance mode and
         # should be reachable normally

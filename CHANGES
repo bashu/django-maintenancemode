@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.11.1
+------
+
+- Enable network specify in INTERNAL_IPS
+
 0.11.0
 ------
 
@@ -11,8 +16,8 @@ Changes
 
 - Made sure the app runs on Django 1.8.
 
-0.10
-----
+0.10.0
+------
 
 - Got rid of dependency on setuptools
 - Added ability to exclude specific paths from maintenance mode with the

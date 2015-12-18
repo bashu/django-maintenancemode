@@ -33,24 +33,20 @@ urlpatterns = [
 ]
 
 
+@override_settings(INTERNAL_IPS=[])
+@override_settings(MAINTENANCE_MODE=False)
+@override_settings(TEMPLATE_DIRS=[], TEMPLATES=[])
 @override_settings(ROOT_URLCONF='maintenancemode.tests')
 class MaintenanceModeMiddlewareTestCase(TestCase):
 
     def setUp(self):
-        # Reset config options adapted in the individual tests
-        self.old_MAINTENANCE_MODE = getattr(settings, 'MAINTENANCE_MODE', False)
-        settings.MAINTENANCE_MODE = False
         utils.deactivate()  # make sure maintenance mode is off
-
-        settings.TEMPLATE_DIRS = ()
-        settings.INTERNAL_IPS = ()
 
         self.user = User.objects.create_user(
             username='maintenance', email='maintenance@example.org', password='password')
 
     def tearDown(self):
         self.user.delete()
-        settings.MAINTENANCE_MODE = self.old_MAINTENANCE_MODE
         
     def test_default_middleware(self):
         # Middleware should default to being disabled
@@ -66,7 +62,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_enabled_middleware_without_template(self):
         # Enabling the middleware without a proper 503 template should
         # raise a template error
-        with self.settings(MAINTENANCE_MODE=True):
+        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=[]):
             self.assertRaises(TemplateDoesNotExist, self.client.get, '/')
 
     def test_enabled_middleware_with_template(self):
@@ -125,9 +121,9 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_management_command(self):
         out = StringIO()
         # Explicitly disabling the ``MAINTENANCE_MODE``
-        with self.settings(MAINTENANCE_MODE=False):
+        with self.settings(MAINTENANCE_MODE=False, TEMPLATE_DIRS=TEMPLATE_DIRS):
             management.call_command('maintenance', 'on', stdout=out)
-            self.assertRaises(TemplateDoesNotExist, self.client.get, '/')
+            self.assertContains(self.client.get('/'), text='Temporary unavailable', count=1, status_code=503)
 
             management.call_command('maintenance', 'off', stdout=out)
             self.assertContains(self.client.get('/'), text='Rendered response page', count=1, status_code=200)

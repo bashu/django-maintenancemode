@@ -10,6 +10,7 @@ from django.template import TemplateDoesNotExist
 
 from django.test import TestCase
 from django.test.client import Client
+from django.test.utils import override_settings
 
 try:
     from django.conf.urls import patterns, url
@@ -25,15 +26,15 @@ TEMPLATE_DIRS = [
     os.path.join(PROJECT_ROOT, 'test_templates'),
 ]
 
-# This file acts as a urlconf
+
 urlpatterns = [
     url('^$', lambda r: HttpResponse('Rendered response page'), name='test'),
     url('^ignored/$', lambda r: HttpResponse('Rendered response page'), name='test'),
 ]
 
 
+@override_settings(ROOT_URLCONF='maintenancemode.tests')
 class MaintenanceModeMiddlewareTestCase(TestCase):
-    urls = 'maintenancemode.tests'
 
     def setUp(self):
         # Reset config options adapted in the individual tests

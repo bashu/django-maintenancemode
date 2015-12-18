@@ -26,10 +26,10 @@ TEMPLATE_DIRS = [
 ]
 
 # This file acts as a urlconf
-urlpatterns = patterns('',
+urlpatterns = [
     url('^$', lambda r: HttpResponse('Rendered response page'), name='test'),
     url('^ignored/$', lambda r: HttpResponse('Rendered response page'), name='test'),
-)
+]
 
 
 class MaintenanceModeMiddlewareTestCase(TestCase):

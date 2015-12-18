@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from django.template import RequestContext, loader
+import django
+
+if django.get_version() >= '1.8':
+    from django.template.loader import render_to_string
+else:
+    from django.template import loader, RequestContext
+
+    def render_to_string(template_name, context=None, request=None):
+        context_instance = RequestContext(request) if request else None
+        return loader.render_to_string(template_name, context, context_instance)
 
 from . import http 
 
@@ -17,9 +26,8 @@ def temporary_unavailable(request, template_name='503.html'):
             The path of the requested URL (e.g., '/app/pages/bad_page/')
 
     """
-    t = loader.get_template(template_name)  # You need to have a 503.html template.
-    context = RequestContext(request, {
+    context = {
         'request_path': request.path,
-    })
-
-    return http.HttpResponseTemporaryUnavailable(t.render(context))
+    }
+    return http.HttpResponseTemporaryUnavailable(
+        render_to_string(template_name, context))

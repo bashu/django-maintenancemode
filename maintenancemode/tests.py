@@ -23,6 +23,15 @@ TEMPLATE_DIRS = [
     os.path.join(PROJECT_ROOT, 'test_templates'),
 ]
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(PROJECT_ROOT, 'test_templates'),
+        ],
+        'APP_DIRS': True,
+    }
+]
 
 urlpatterns = [
     url('^$', lambda r: HttpResponse('Rendered response page'), name='test'),
@@ -65,7 +74,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_enabled_middleware_with_template(self):
         # Enabling the middleware having a ``503.html`` in any of the
         # template locations should return the rendered template"
-        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS):
+        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
             response = self.client.get('/')
         self.assertContains(response, text='Temporary unavailable', count=1, status_code=503)
         self.assertContains(response, text='You requested: /', count=1, status_code=503)
@@ -74,7 +83,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
         # A logged in user that is not a staff user should see the 503 message
         self.client.login(username='maintenance', password='password')
 
-        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS):
+        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
             response = self.client.get('/')
         self.assertContains(response, text='Temporary unavailable', count=1, status_code=503)
 
@@ -85,7 +94,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
 
         self.client.login(username='maintenance', password='password')
 
-        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS):
+        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
             response = self.client.get('/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)
 
@@ -110,7 +119,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_ignored_path(self):
         # A path is ignored when applying the maintanance mode and
         # should be reachable normally
-        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS):
+        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
             with self.settings(IGNORE_URLS=(re.compile(r'^/ignored.*'),)):
                 response = self.client.get('/ignored/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)
@@ -118,7 +127,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_management_command(self):
         out = StringIO()
         # Explicitly disabling the ``MAINTENANCE_MODE``
-        with self.settings(MAINTENANCE_MODE=False, TEMPLATE_DIRS=TEMPLATE_DIRS):
+        with self.settings(MAINTENANCE_MODE=False, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
             management.call_command('maintenance', 'on', stdout=out)
             self.assertContains(self.client.get('/'), text='Temporary unavailable', count=1, status_code=503)
 

@@ -12,10 +12,7 @@ from django.test import TestCase
 from django.test.client import Client
 from django.test.utils import override_settings
 
-try:
-    from django.conf.urls import patterns, url
-except ImportError:  # django < 1.4
-    from django.conf.urls.defaults import patterns, url
+from django.conf.urls import url
 
 from maintenancemode import utils
 from maintenancemode import middleware as mw

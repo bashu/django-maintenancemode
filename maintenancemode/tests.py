@@ -68,7 +68,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
     def test_enabled_middleware_without_template(self):
         # Enabling the middleware without a proper 503 template should
         # raise a template error
-        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=[]):
+        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=[], TEMPLATES=[]):
             self.assertRaises(TemplateDoesNotExist, self.client.get, '/')
 
     def test_enabled_middleware_with_template(self):

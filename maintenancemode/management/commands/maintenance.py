@@ -19,11 +19,14 @@ class Command(BaseCommand):
             if command.lower() in ('on', 'activate'):
                 maintenance.activate()
                 if verbosity > 0:
-                    self.stdout.write('Maintenance mode was activated succesfully')
+                    self.stdout.write(
+                        "Maintenance mode was activated succesfully")
             elif command.lower() in ('off', 'deactivate'):
                 maintenance.deactivate()
                 if verbosity > 0:
-                    self.stdout.write('Maintenance mode was deactivated succesfully')
+                    self.stdout.write(
+                        "Maintenance mode was deactivated succesfully")
 
         if command not in self.opts:
-            raise CommandError('Allowed commands are: %s' % '|'.join(self.opts))
+            raise CommandError(
+                "Allowed commands are: %s" % '|'.join(self.opts))

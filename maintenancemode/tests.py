@@ -1,7 +1,6 @@
 import re
 import os.path
 
-from django.conf import settings
 from django.core import management
 from django.http import HttpResponse
 from django.utils.six import StringIO
@@ -15,7 +14,6 @@ from django.test.utils import override_settings
 from django.conf.urls import url
 
 from maintenancemode import utils
-from maintenancemode import middleware as mw
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
@@ -53,7 +51,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
 
     def tearDown(self):
         self.user.delete()
-        
+
     def test_default_middleware(self):
         # Middleware should default to being disabled
         response = self.client.get('/')

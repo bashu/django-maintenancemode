@@ -1,12 +1,8 @@
-import django
+from django.conf.urls import url
 
-if django.VERSION < (1, 4):
-    from django.conf.urls.defaults import *
-else:
-    from django.conf.urls import *
+from .views import index
 
-urlpatterns = patterns('example.views',
-    url(r'^$', 'index'),
-    url(r'^ignored/$', 'index'),
-)
-
+urlpatterns = [
+    url(r'^$', index),
+    url(r'^ignored/$', index),
+]

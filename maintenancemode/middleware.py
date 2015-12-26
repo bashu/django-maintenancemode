@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import re
-
 import django
-from django.core import urlresolvers
 
-if django.VERSION < (1, 4):
-    from django.conf.urls import defaults as urls
-else:
-    from django.conf import urls
+from django.conf import urls
+from django.core import urlresolvers
 
 from .conf import settings
 from . import utils as maintenance

@@ -1,6 +1,12 @@
 Changes
 =======
 
+0.11.2
+------
+
+- Getting ready for Django 1.10 release.
+- Dropped support for Django 1.3 and older.
+
 0.11.1
 ------
 
@@ -28,10 +34,12 @@ Changes
 
 0.9.3
 -----
+
 - Minor documentation updates for the switch to github, expect more changes to follow soon.
 
 0.9.2
 -----
+
 - Fixed an issue with setuptools, thanks for reporting this ksato9700
 
 0.9.1
@@ -40,7 +48,8 @@ Changes
 - Tested django-maintenancemode with django-1.0 release (following the 1.0.X release branch)
 - Bundled buildout.cfg and bootstrap with the source version of the project, allowing repeatable buildout
 - The middleware now uses its own default config file, thanks to a patch by semente
-- Use INTERNAL_IPS to check for users that need access. user.is_staff will stay in place for backwards incompatibility. Thanks for the idea Joshua Works
+- Use INTERNAL_IPS to check for users that need access. user.is_staff will stay in place
+  for backwards incompatibility. Thanks for the idea Joshua Works
 - Have setup.py sdist only distribute maintenancemode itself, no longer distribute tests and buildout stuff
 - Use README and CHANGES in setup.py's long_description, stolen from Jeroen's djangorecipe :)
 - Updated the documentation and now use pypi as the documentation source (link there from google code)

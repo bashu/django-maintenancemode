@@ -30,6 +30,7 @@ def temporary_unavailable(request, template_name='503.html'):
     """
     context = {
         'request_path': request.path,
+        'request': request
     }
     return http.HttpResponseTemporaryUnavailable(
         render_to_string(template_name, context))

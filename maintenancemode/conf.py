@@ -11,6 +11,10 @@ class MaintenanceSettings(AppConf):
     LOCKFILE_PATH = os.path.join(
         os.path.abspath(os.path.dirname(__file__)), 'maintenance.lock')
     MODE = False
+    LOCKING_METHOD = 'file'
+    CACHE_KEY = "DJANGO_MAINTENANCE_MODE_ON"
+    CACHE_TTL = 60 * 60 * 24
+    CACHE_BACKEND = "default"
 
     class Meta:
         prefix = 'maintenance'

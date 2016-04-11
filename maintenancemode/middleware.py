@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import re
-import django
+from datetime import datetime
+from time import mktime
+from wsgiref.handlers import format_date_time
 
+import django
 from django.conf import urls
 from django.core import urlresolvers
 
-from .conf import settings
 from . import utils as maintenance
+from .conf import settings
 
 urls.handler503 = 'maintenancemode.views.temporary_unavailable'
 urls.__all__.append('handler503')
@@ -19,7 +22,20 @@ class MaintenanceModeMiddleware(object):
 
     def process_request(self, request):
         # Allow access if middleware is not activated
-        if not (settings.MAINTENANCE_MODE or maintenance.status()):
+        value = settings.MAINTENANCE_MODE or maintenance.status()
+        if not value:
+            return None
+
+        if isinstance(value, datetime):
+            retry_after = value
+        else:
+            retry_after = None
+
+        # used by template
+        request.retry_after = retry_after
+
+        if retry_after and datetime.now() > retry_after:
+            # maintenance ended
             return None
 
         INTERNAL_IPS = maintenance.IPList(settings.INTERNAL_IPS)
@@ -52,4 +68,13 @@ class MaintenanceModeMiddleware(object):
         else:
             callback, param_dict = resolver.resolve_error_handler('503')
 
-        return callback(request, **param_dict)
+        print callback
+
+        response = callback(request, **param_dict)
+
+        if retry_after:
+            response["Retry-After"] = format_date_time(
+                mktime(retry_after.timetuple())
+            )
+
+        return response

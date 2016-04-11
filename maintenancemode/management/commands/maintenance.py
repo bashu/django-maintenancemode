@@ -16,17 +16,33 @@ class Command(BaseCommand):
         verbosity = int(options.get('verbosity'))
 
         if command is not None:
-            if command.lower() in ('on', 'activate'):
+            try:
+                maintenance_duration = int(command)
+            except ValueError:
+                maintenance_duration = None
+            if maintenance_duration:
+                maintenance.activate(maintenance_duration)
+                if verbosity > 0:
+                    self.stdout.write(
+                        "Maintenance mode was activated "
+                        "succesfully for %s seconds" % maintenance_duration
+                    )
+                return
+            elif command.lower() in ('on', 'activate'):
                 maintenance.activate()
                 if verbosity > 0:
                     self.stdout.write(
                         "Maintenance mode was activated succesfully")
+                return
             elif command.lower() in ('off', 'deactivate'):
                 maintenance.deactivate()
                 if verbosity > 0:
                     self.stdout.write(
                         "Maintenance mode was deactivated succesfully")
+                return
 
         if command not in self.opts:
             raise CommandError(
-                "Allowed commands are: %s" % '|'.join(self.opts))
+                "Allowed commands are: %s or maintenance duration in seconds"
+                % '|'.join(self.opts)
+            )

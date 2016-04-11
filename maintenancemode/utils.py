@@ -2,7 +2,14 @@
 
 import os
 
+from dateutil.relativedelta import relativedelta
+from datetime import datetime
+from django.core.cache import get_cache
+from django.core.exceptions import ImproperlyConfigured
+
 from .conf import settings
+
+LOCKING_METHOD = settings.MAINTENANCE_LOCKING_METHOD
 
 
 class IPList(list):
@@ -26,18 +33,53 @@ class IPList(list):
         return False
 
 
-def activate():
-    try:
-        open(settings.MAINTENANCE_LOCKFILE_PATH, 'ab', 0).close()
-    except OSError:
-        pass  # shit happens
+def activate(maintenance_duration=None):
+    if maintenance_duration:
+        cache_value = (
+            datetime.now() + relativedelta(seconds=maintenance_duration)
+        )
+    else:
+        cache_value = True
+    if LOCKING_METHOD == "file":
+        try:
+            open(settings.MAINTENANCE_LOCKFILE_PATH, 'ab', 0).close()
+        except OSError:
+            pass  # shit happens
+    elif LOCKING_METHOD == "cache":
+        cache = get_cache(settings.MAINTENANCE_CACHE_BACKEND)
+        cache.set(
+            settings.MAINTENANCE_CACHE_KEY,
+            cache_value,
+            settings.MAINTENANCE_CACHE_TTL
+        )
+    else:
+        raise ImproperlyConfigured(
+            "Unknown locking method %s" % LOCKING_METHOD)
 
 
 def deactivate():
-    if os.path.isfile(settings.MAINTENANCE_LOCKFILE_PATH):
-        os.remove(settings.MAINTENANCE_LOCKFILE_PATH)
+    LOCKING_METHOD = settings.MAINTENANCE_LOCKING_METHOD
+    if LOCKING_METHOD == "file":
+        if os.path.isfile(settings.MAINTENANCE_LOCKFILE_PATH):
+            os.remove(settings.MAINTENANCE_LOCKFILE_PATH)
+    elif LOCKING_METHOD == "cache":
+        cache = get_cache(settings.MAINTENANCE_CACHE_BACKEND)
+        cache.delete(
+            settings.MAINTENANCE_CACHE_KEY
+        )
+    else:
+        raise ImproperlyConfigured(
+            "Unknown locking method %s" % LOCKING_METHOD)
 
 
 def status():
-    return settings.MAINTENANCE_MODE or os.path.isfile(
-        settings.MAINTENANCE_LOCKFILE_PATH)
+    LOCKING_METHOD = settings.MAINTENANCE_LOCKING_METHOD
+    if LOCKING_METHOD == "file":
+        return settings.MAINTENANCE_MODE or os.path.isfile(
+            settings.MAINTENANCE_LOCKFILE_PATH)
+    elif LOCKING_METHOD == "cache":
+        cache = get_cache(settings.MAINTENANCE_CACHE_BACKEND)
+        return cache.get(settings.MAINTENANCE_CACHE_KEY)
+    else:
+        raise ImproperlyConfigured(
+            "Unknown locking method %s" % LOCKING_METHOD)

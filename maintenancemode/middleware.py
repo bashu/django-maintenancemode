@@ -4,6 +4,8 @@ import re
 from datetime import datetime
 from time import mktime
 from wsgiref.handlers import format_date_time
+from time import sleep
+import logging
 
 import django
 from django.conf import urls
@@ -17,8 +19,27 @@ urls.__all__.append('handler503')
 
 IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
 
+MAX_WAIT_FOR_END = settings.MAINTENANCE_MAX_WAIT_FOR_END
+
+logger = logging.getLogger(__name__)
 
 class MaintenanceModeMiddleware(object):
+
+    def cond_wait_for_end_of_maintenance(self, request, retry_after):
+        """
+        Wait for remaining maintenance time if waiting time is
+        less than MAX_WAIT_FOR_END
+        """
+        ends_in = (retry_after - datetime.now()).total_seconds()
+        max_wait = MAX_WAIT_FOR_END
+        if ends_in > 0 and ends_in < max_wait:
+            logger.info(
+                u"[%s] waiting for %ss" % (
+                    request.path, ends_in
+                )
+            )
+            sleep(ends_in)
+        return
 
     def process_request(self, request):
         # Allow access if middleware is not activated
@@ -33,6 +54,9 @@ class MaintenanceModeMiddleware(object):
 
         # used by template
         request.retry_after = retry_after
+
+        if retry_after:
+            self.cond_wait_for_end_of_maintenance(request, retry_after)
 
         if retry_after and datetime.now() > retry_after:
             # maintenance ended
@@ -67,8 +91,6 @@ class MaintenanceModeMiddleware(object):
             callback, param_dict = resolver._resolve_special('503')
         else:
             callback, param_dict = resolver.resolve_error_handler('503')
-
-        print callback
 
         response = callback(request, **param_dict)
 

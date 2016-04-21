@@ -19,6 +19,9 @@ class MaintenanceModeMiddleware(object):
 
     def process_request(self, request):
         # Allow access if middleware is not activated
+        allow_staff = getattr(settings, 'MAINTENANCE_ALLOW_STAFF', True)
+        allow_superuser = getattr(settings, 'MAINTENANCE_ALLOW_SUPERUSER', True)
+
         if not (settings.MAINTENANCE_MODE or maintenance.status()):
             return None
 
@@ -36,8 +39,12 @@ class MaintenanceModeMiddleware(object):
 
         # Allow access if the user doing the request is logged in and a
         # staff member.
-        if hasattr(request, 'user') and request.user.is_staff:
-            return None
+        if hasattr(request, 'user'):
+            if request.user.is_staff and allow_staff:
+                return None
+
+            if request.user.is_superuser and allow_superuser:
+                return None
 
         # Check if a path is explicitly excluded from maintenance mode
         for url in IGNORE_URLS:

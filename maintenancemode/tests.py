@@ -125,7 +125,7 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
 
         self.client.login(username='maintenance', password='password')
 
-        with self.settings(MAINTENANCE_MODE=True, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
+        with self.settings(MAINTENANCE_MODE=True, MAINTENANCE_ALLOW_STAFF=False, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
             response = self.client.get('/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)
 

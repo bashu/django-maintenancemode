@@ -36,12 +36,10 @@ setup(
     license='BSD License',
 
     install_requires=[
-        'django>=1.4.2',
         'django-appconf',
         'ipy',
     ],
     requires=[
-        'Django (>=1.4.2)',
     ],
 
     description="django-maintenancemode allows you to temporary shutdown your site for maintenance work",

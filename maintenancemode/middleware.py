@@ -45,7 +45,7 @@ class MaintenanceModeMiddleware(object):
         # Allow access if middleware is not activated
         if not getattr(settings, 'MAINTENANCE_MODE', False):
             return None
-        if not maintenance.status()
+        if not maintenance.status():
             return None
 
         if isinstance(value, datetime):

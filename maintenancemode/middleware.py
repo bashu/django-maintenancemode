@@ -17,9 +17,9 @@ from .conf import settings
 urls.handler503 = 'maintenancemode.views.temporary_unavailable'
 urls.__all__.append('handler503')
 
-IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
+IGNORE_URLS = tuple([re.compile(u) for u in getattr(settings, 'MAINTENANCE_IGNORE_URLS', [])])
 
-MAX_WAIT_FOR_END = settings.MAINTENANCE_MAX_WAIT_FOR_END
+MAX_WAIT_FOR_END = getattr(settings, 'MAINTENANCE_MAX_WAIT_FOR_END', 60)
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ class MaintenanceModeMiddleware(object):
 
     def process_request(self, request):
         # Allow access if middleware is not activated
-        value = settings.MAINTENANCE_MODE or maintenance.status()
+        value = getattr(settings, 'MAINTENANCE_MODE', False) or maintenance.status()
         if not value:
             return None
 

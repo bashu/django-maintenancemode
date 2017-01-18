@@ -11,6 +11,10 @@ from .conf import settings
 
 LOCKING_METHOD = settings.MAINTENANCE_LOCKING_METHOD
 
+CACHE_BACKEND = settings.MAINTENANCE_CACHE_BACKEND
+
+cache = get_cache(CACHE_BACKEND)
+
 
 class IPList(list):
     """Stolen from https://djangosnippets.org/snippets/1362/"""
@@ -46,7 +50,6 @@ def activate(maintenance_duration=None):
         except OSError:
             pass  # shit happens
     elif LOCKING_METHOD == "cache":
-        cache = get_cache(settings.MAINTENANCE_CACHE_BACKEND)
         cache.set(
             settings.MAINTENANCE_CACHE_KEY,
             cache_value,
@@ -63,7 +66,6 @@ def deactivate():
         if os.path.isfile(settings.MAINTENANCE_LOCKFILE_PATH):
             os.remove(settings.MAINTENANCE_LOCKFILE_PATH)
     elif LOCKING_METHOD == "cache":
-        cache = get_cache(settings.MAINTENANCE_CACHE_BACKEND)
         cache.delete(
             settings.MAINTENANCE_CACHE_KEY
         )
@@ -78,7 +80,6 @@ def status():
         return settings.MAINTENANCE_MODE or os.path.isfile(
             settings.MAINTENANCE_LOCKFILE_PATH)
     elif LOCKING_METHOD == "cache":
-        cache = get_cache(settings.MAINTENANCE_CACHE_BACKEND)
         return cache.get(settings.MAINTENANCE_CACHE_KEY)
     else:
         raise ImproperlyConfigured(

@@ -44,6 +44,7 @@ TEMPLATES = [
 
 PROJECT_APPS = [
     'maintenancemode',
+    'ignore_app'
 ]
 
 INSTALLED_APPS = [
@@ -95,6 +96,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MAINTENANCE_MODE = True  # or ``False`` and use ``maintenance`` command
+
 MAINTENANCE_IGNORE_URLS = (
-    re.compile(r'^/ignored.*'),
+    re.compile(r'^/ignored/?$'),
+)
+
+MAINTENANCE_IGNORE_APPS = (
+    'ignore_app.urls',
 )

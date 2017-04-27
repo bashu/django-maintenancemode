@@ -42,10 +42,13 @@ class MaintenanceModeMiddleware(object):
         return
 
     def process_request(self, request):
-        # Allow access if middleware is not activated
-        if not getattr(settings, 'MAINTENANCE_MODE', False):
+        if not hasattr(settings, 'MAINTENANCE_MODE'):
+            # package not setup
             return None
-        if not maintenance.status():
+
+        value = getattr(settings, 'MAINTENANCE_MODE', False) or maintenance.status()
+        if not value:
+            # maintenance not active
             return None
 
         if isinstance(value, datetime):

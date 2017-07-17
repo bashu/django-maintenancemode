@@ -5,7 +5,12 @@ import django
 
 from django.conf import urls
 from django.core import urlresolvers
-
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    # Compatibility for older version of Django
+    MiddlewareMixin = object
+    
 from .conf import settings
 from . import utils as maintenance
 
@@ -15,7 +20,7 @@ urls.__all__.append('handler503')
 IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
 
 
-class MaintenanceModeMiddleware(object):
+class MaintenanceModeMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         # Allow access if middleware is not activated

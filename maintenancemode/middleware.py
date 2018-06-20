@@ -3,10 +3,9 @@
 import re
 
 from django.conf import urls
-from django.http import Http404
+from django.urls import get_resolver
 from django.utils.deprecation import MiddlewareMixin
 
-from maintenancemode.http import HttpResponseTemporaryUnavailable
 from . import utils as maintenance
 from .conf import settings
 
@@ -46,4 +45,8 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
                 return None
 
         # Otherwise show the user the 503 page
-        return HttpResponseTemporaryUnavailable()
+        resolver = get_resolver()
+
+        callback, param_dict = resolver.resolve_error_handler('503')
+
+        return callback(request, **param_dict)

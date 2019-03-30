@@ -8,6 +8,7 @@ from django.core import urlresolvers
 
 from .conf import settings
 from . import utils as maintenance
+from django.utils.deprecation import MiddlewareMixin
 
 urls.handler503 = 'maintenancemode.views.temporary_unavailable'
 urls.__all__.append('handler503')
@@ -15,7 +16,7 @@ urls.__all__.append('handler503')
 IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
 
 
-class MaintenanceModeMiddleware(object):
+class MaintenanceModeMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         # Allow access if middleware is not activated

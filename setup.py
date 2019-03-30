@@ -27,7 +27,6 @@ setup(
     license='BSD License',
 
     install_requires=[
-        'django>=1.4.2',
         'django-appconf',
         'ipy',
     ],

@@ -22,6 +22,9 @@ Authored by `Remco Wendt <https://github.com/shanx>`_, and some great `contribut
 .. image:: https://img.shields.io/travis/shanx/django-maintenancemode.svg
     :target: https://travis-ci.org/shanx/django-maintenancemode/
 
+.. image:: https://coveralls.io/repos/github/shanx/django-maintenancemode/badge.svg?branch=develop
+    :target: https://coveralls.io/github/shanx/django-maintenancemode?branch=develop
+
 How it works
 ------------
 

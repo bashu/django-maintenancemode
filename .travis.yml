@@ -15,7 +15,7 @@ env:
   - DJANGO="Django>=1.11,<1.12"
   - DJANGO="https://github.com/django/django/archive/master.tar.gz"
 before_install:
-  - pip install -q $DJANGO
+  - pip install -q $DJANGO coveralls
 install:
   - python setup.py develop
 script:

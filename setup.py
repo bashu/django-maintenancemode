@@ -30,9 +30,6 @@ setup(
         'django-appconf',
         'ipy',
     ],
-    requires=[
-        'Django (>=1.4.2)',
-    ],
 
     description="django-maintenancemode allows you to temporary shutdown your site for maintenance work",
     long_description=read('README.rst') + '\n\n' + read('CHANGES.rst'),

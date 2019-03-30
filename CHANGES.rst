@@ -1,6 +1,12 @@
 Changes
 -------
 
+0.11.3
+~~~~~~
+
+- Added support for django 2.x, dropped support for django < 1.11. It may
+  still work with django 1.8, but this is no longer tested.
+
 0.11.2
 ~~~~~~
 

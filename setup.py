@@ -4,17 +4,8 @@ import os
 import re
 import sys
 import codecs
-import subprocess
 
 from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
-
-
-class TestRunner(TestCommand):
-    user_options = []
-
-    def run(self):
-        raise SystemExit(subprocess.call([sys.executable, 'runtests.py']))
 
 
 def read(*parts):
@@ -36,7 +27,6 @@ setup(
     license='BSD License',
 
     install_requires=[
-        'django>=1.4.2',
         'django-appconf',
         'ipy',
     ],
@@ -45,7 +35,7 @@ setup(
     ],
 
     description="django-maintenancemode allows you to temporary shutdown your site for maintenance work",
-    long_description=read('README.rst'),
+    long_description=read('README.rst') + '\n\n' + read('CHANGES.rst'),
 
     author='Remco Wendt',
     author_email='remco@maykinmedia.nl',
@@ -60,10 +50,9 @@ setup(
     include_package_data=True,
 
     tests_require=[
+        'django-setuptest',
     ],
-    cmdclass={
-        'test': TestRunner,
-    },
+    test_suite='setuptest.setuptest.SetupTestSuite',
 
     zip_safe=False,
     classifiers=[
@@ -79,6 +68,9 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',        
+        'Programming Language :: Python :: 3.5',        
+        'Programming Language :: Python :: 3.6',        
+        'Programming Language :: Python :: 3.7',        
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],

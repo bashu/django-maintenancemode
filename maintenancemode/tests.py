@@ -96,6 +96,39 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
             response = self.client.get('/')
         self.assertContains(response, text='Rendered response page', count=1, status_code=200)
 
+    def test_middleware_with_staff_user_denied(self):
+        # A logged in user that _is_ a staff user should be able to
+        # use the site normally
+        User.objects.filter(pk=self.user.pk).update(is_staff=True)
+
+        self.client.login(username='maintenance', password='password')
+
+        with self.settings(MAINTENANCE_MODE=True, MAINTENANCE_ALLOW_STAFF=False, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
+            response = self.client.get('/')
+        self.assertContains(response, text='Temporary unavailable', count=1, status_code=503)
+
+    def test_middleware_with_superuser_user_denied(self):
+        # A logged in user that _is_ a staff user should be able to
+        # use the site normally
+        User.objects.filter(pk=self.user.pk).update(is_superuser=True)
+
+        self.client.login(username='maintenance', password='password')
+
+        with self.settings(MAINTENANCE_MODE=True, MAINTENANCE_ALLOW_SUPERUSER=False, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
+            response = self.client.get('/')
+        self.assertContains(response, text='Temporary unavailable', count=1, status_code=503)
+
+    def test_middleware_with_superuser_user_allowed(self):
+        # A logged in user that _is_ a staff user should be able to
+        # use the site normally
+        User.objects.filter(pk=self.user.pk).update(is_superuser=True)
+
+        self.client.login(username='maintenance', password='password')
+
+        with self.settings(MAINTENANCE_MODE=True, MAINTENANCE_ALLOW_STAFF=False, TEMPLATE_DIRS=TEMPLATE_DIRS, TEMPLATES=TEMPLATES):
+            response = self.client.get('/')
+        self.assertContains(response, text='Rendered response page', count=1, status_code=200)
+
     def test_middleware_with_internal_ips(self):
         # A user that visits the site from an IP in ``INTERNAL_IPS``
         # should be able to use the site normally

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import re
-import django
 
 from django.conf import urls
-from django.core import urlresolvers
+from django.urls import get_resolver
+from django.utils.deprecation import MiddlewareMixin
 
-from .conf import settings
 from . import utils as maintenance
+from .conf import settings
 
 urls.handler503 = 'maintenancemode.views.temporary_unavailable'
 urls.__all__.append('handler503')
@@ -15,10 +15,13 @@ urls.__all__.append('handler503')
 IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
 
 
-class MaintenanceModeMiddleware(object):
+class MaintenanceModeMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         # Allow access if middleware is not activated
+        allow_staff = getattr(settings, 'MAINTENANCE_ALLOW_STAFF', True)
+        allow_superuser = getattr(settings, 'MAINTENANCE_ALLOW_SUPERUSER', True)
+
         if not (settings.MAINTENANCE_MODE or maintenance.status()):
             return None
 
@@ -36,8 +39,12 @@ class MaintenanceModeMiddleware(object):
 
         # Allow access if the user doing the request is logged in and a
         # staff member.
-        if hasattr(request, 'user') and request.user.is_staff:
-            return None
+        if hasattr(request, 'user'):
+            if request.user.is_staff and allow_staff:
+                return None
+
+            if request.user.is_superuser and allow_superuser:
+                return None
 
         # Check if a path is explicitly excluded from maintenance mode
         for url in IGNORE_URLS:
@@ -45,11 +52,8 @@ class MaintenanceModeMiddleware(object):
                 return None
 
         # Otherwise show the user the 503 page
-        resolver = urlresolvers.get_resolver(None)
+        resolver = get_resolver()
 
-        if django.VERSION < (1, 8):
-            callback, param_dict = resolver._resolve_special('503')
-        else:
-            callback, param_dict = resolver.resolve_error_handler('503')
+        callback, param_dict = resolver.resolve_error_handler('503')
 
         return callback(request, **param_dict)

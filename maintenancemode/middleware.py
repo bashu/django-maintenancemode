@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import re
-import django
 
 from django.conf import urls
 from django.urls import get_resolver
-try:
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-    # Compatibility for older version of Django
-    MiddlewareMixin = object
-    
-from .conf import settings
-from . import utils as maintenance
 from django.utils.deprecation import MiddlewareMixin
+
+from . import utils as maintenance
+from .conf import settings
 
 urls.handler503 = 'maintenancemode.views.temporary_unavailable'
 urls.__all__.append('handler503')
@@ -58,11 +52,8 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
                 return None
 
         # Otherwise show the user the 503 page
-        resolver = get_resolver(None)
+        resolver = get_resolver()
 
-        if django.VERSION < (1, 8):
-            callback, param_dict = resolver._resolve_special('503')
-        else:
-            callback, param_dict = resolver.resolve_error_handler('503')
+        callback, param_dict = resolver.resolve_error_handler('503')
 
         return callback(request, **param_dict)

@@ -1,29 +1,29 @@
 Changes
-=======
+-------
 
 0.11.2
-------
+~~~~~~
 
 - Getting ready for Django 1.10 release.
 - Dropped support for Django 1.3 and older.
 
 0.11.1
-------
+~~~~~~
 
 - Enable network specify in INTERNAL_IPS
 
 0.11.0
-------
+~~~~~~
 
 - Added management command to set maintenance mode on/off
 
 0.10.1
-------
+~~~~~~
 
 - Made sure the app runs on Django 1.8.
 
 0.10.0
-------
+~~~~~~
 
 - Got rid of dependency on setuptools
 - Added ability to exclude specific paths from maintenance mode with the
@@ -33,17 +33,17 @@ Changes
 - Made sure the app runs on Django 1.4.
 
 0.9.3
------
+~~~~~~
 
 - Minor documentation updates for the switch to github, expect more changes to follow soon.
 
 0.9.2
------
+~~~~~~
 
 - Fixed an issue with setuptools, thanks for reporting this ksato9700
 
 0.9.1
------
+~~~~~~
 
 - Tested django-maintenancemode with django-1.0 release (following the 1.0.X release branch)
 - Bundled buildout.cfg and bootstrap with the source version of the project, allowing repeatable buildout
@@ -55,6 +55,6 @@ Changes
 - Updated the documentation and now use pypi as the documentation source (link there from google code)
 
 0.9
------
+~~~~~~
 
 First release

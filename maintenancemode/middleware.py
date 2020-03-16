@@ -14,6 +14,13 @@ urls.__all__.append('handler503')
 
 IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
 
+IGNORE_APPS = []
+
+if settings.MAINTENANCE_IGNORE_APPS:
+    for each_app in settings.MAINTENANCE_IGNORE_APPS:
+        app_obj = urls.include(each_app)[0]
+        IGNORE_APPS.extend([p.regex for p in app_obj.urlpatterns])
+
 
 class MaintenanceModeMiddleware(MiddlewareMixin):
 
@@ -49,6 +56,11 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
         # Check if a path is explicitly excluded from maintenance mode
         for url in IGNORE_URLS:
             if url.match(request.path_info):
+                return None
+
+        # Check if app paths is explicitly excluded from maintenance mode
+        for url in IGNORE_APPS:
+            if url.match(request.path_info.replace('/', '', 1)):
                 return None
 
         # Otherwise show the user the 503 page

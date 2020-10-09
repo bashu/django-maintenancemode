@@ -2,21 +2,21 @@
 
 import django
 
-if django.get_version() >= '1.8':
+if django.get_version() >= "1.8":
     from django.template.loader import render_to_string
 else:
-    from django.template import loader, RequestContext
+    from django.template import RequestContext, loader
 
     def render_to_string(template_name, context=None, request=None):
         context_instance = RequestContext(request) if request else None
 
-        return loader.render_to_string(
-            template_name, context, context_instance)
+        return loader.render_to_string(template_name, context, context_instance)
+
 
 from . import http
 
 
-def temporary_unavailable(request, template_name='503.html'):
+def temporary_unavailable(request, template_name="503.html"):
     """
     Default 503 handler, which looks for the requested URL in the
     redirects table, redirects if found, and displays 404 page if not
@@ -29,7 +29,6 @@ def temporary_unavailable(request, template_name='503.html'):
 
     """
     context = {
-        'request_path': request.path,
+        "request_path": request.path,
     }
-    return http.HttpResponseTemporaryUnavailable(
-        render_to_string(template_name, context))
+    return http.HttpResponseTemporaryUnavailable(render_to_string(template_name, context))

@@ -1,7 +1,7 @@
 try:
-    from django.conf.urls import include, url
+    from django.conf.urls import url
 except ImportError:
-    from django.conf.urls.defaults import include, url
+    from django.conf.urls.defaults import url
 
 from django.http import HttpResponse
 
@@ -10,6 +10,6 @@ from django.http import HttpResponse
 # module should be referred to by your test class.
 
 urlpatterns = [
-    url('^$', lambda r: HttpResponse('Rendered response page'), name='test'),
-    url('^ignored/$', lambda r: HttpResponse('Rendered response page'), name='test'),
+    url("^$", lambda r: HttpResponse("Rendered response page"), name="test"),
+    url("^ignored/$", lambda r: HttpResponse("Rendered response page"), name="test"),
 ]

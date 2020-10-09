@@ -11,6 +11,7 @@ class IPList(list):
     def __init__(self, ips):
         try:
             from IPy import IP
+
             for ip in ips:
                 self.append(IP(ip))
         except ImportError:
@@ -21,14 +22,14 @@ class IPList(list):
             for net in self:
                 if ip in net:
                     return True
-        except:
+        except:  # noqa
             pass
         return False
 
 
 def activate():
     try:
-        open(settings.MAINTENANCE_LOCKFILE_PATH, 'ab', 0).close()
+        open(settings.MAINTENANCE_LOCKFILE_PATH, "ab", 0).close()
     except OSError:
         pass  # shit happens
 
@@ -39,5 +40,4 @@ def deactivate():
 
 
 def status():
-    return settings.MAINTENANCE_MODE or os.path.isfile(
-        settings.MAINTENANCE_LOCKFILE_PATH)
+    return settings.MAINTENANCE_MODE or os.path.isfile(settings.MAINTENANCE_LOCKFILE_PATH)

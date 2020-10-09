@@ -1,36 +1,48 @@
 # Config file for automatic testing at travis-ci.org
 dist: xenial
 language: python
-
+cache: pip
 sudo: false
-python:
-  - "3.7"
-  - "3.6"
-  - "3.5"
-  - "3.4"
-  - "2.7"
-env:
-  - DJANGO="Django>=2.1,<2.2"
-  - DJANGO="Django>=2.0,<2.1"
-  - DJANGO="Django>=1.11,<1.12"
-  - DJANGO="https://github.com/django/django/archive/master.tar.gz"
-before_install:
-  - pip install -q $DJANGO coveralls
-install:
-  - python setup.py develop
-script:
-  - python setup.py test
-after_success:
-  - coveralls
+
 matrix:
-  exclude:
-    - python: "3.4"
-      env: DJANGO="Django>=2.1,<2.2"
-    - python: "2.7"
-      env: DJANGO="Django>=2.1,<2.2"
-    - python: "2.7"
-      env: DJANGO="Django>=2.0,<2.1"
-    - python: "2.7"
-      env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
-  allow_failures:
-    - env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
+  include:
+    - env: TOXENV=py34-dj111
+      python: 3.4
+    - env: TOXENV=py34-dj2
+      python: 3.4
+    - env: TOXENV=py35-dj111
+      python: 3.5
+    - env: TOXENV=py35-dj2
+      python: 3.5
+    - env: TOXENV=py35-dj21
+      python: 3.5
+    - env: TOXENV=py35-dj22
+      python: 3.5
+    - env: TOXENV=py36-dj111
+      python: 3.6
+    - env: TOXENV=py36-dj2
+      python: 3.6
+    - env: TOXENV=py36-dj21
+      python: 3.6
+    - env: TOXENV=py36-dj22
+      python: 3.6
+    - env: TOXENV=py36-dj3
+      python: 3.6
+    - env: TOXENV=py37-dj2
+      python: 3.7
+    - env: TOXENV=py37-dj21
+      python: 3.7
+    - env: TOXENV=py37-dj22
+      python: 3.7
+    - env: TOXENV=py37-dj3
+      python: 3.7
+    - env: TOXENV=py38-dj22
+      python: 3.8
+    - env: TOXENV=py38-dj3
+      python: 3.8
+
+install:
+  - pip install tox 
+
+script:
+  - tox

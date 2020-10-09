@@ -28,6 +28,7 @@ setup(
 
     install_requires=[
         'django-appconf',
+        'six>=1.9.0',
         'ipy',
     ],
 
@@ -45,11 +46,6 @@ setup(
 
     packages=find_packages(exclude=('example*', '*.tests*')),
     include_package_data=True,
-
-    tests_require=[
-        'django-setuptest',
-    ],
-    test_suite='setuptest.setuptest.SetupTestSuite',
 
     zip_safe=False,
     classifiers=[

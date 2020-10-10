@@ -4,6 +4,10 @@ language: python
 cache: pip
 sudo: false
 
+arch:
+  - amd64
+  - ppc64le
+
 matrix:
   include:
     - env: TOXENV=py34-dj111

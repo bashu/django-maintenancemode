@@ -39,10 +39,10 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
         # Allow access if the user doing the request is logged in and a
         # staff member.
         if hasattr(request, "user"):
-            if request.user.is_staff and allow_staff:
+            if allow_staff and request.user.is_staff:
                 return None
 
-            if request.user.is_superuser and allow_superuser:
+            if allow_superuser and request.user.is_superuser:
                 return None
 
         # Check if a path is explicitly excluded from maintenance mode

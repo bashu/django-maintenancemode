@@ -1,6 +1,10 @@
 Changes
 -------
 
+- Changed the middleware to not fetch the user instance if both
+  ``MAINTENANCE_ALLOW_STAFF`` and ``MAINTENANCE_ALLOW_SUPERUSER`` are
+  ``False``.
+
 0.11.3
 ~~~~~~
 

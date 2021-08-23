@@ -4,6 +4,7 @@ import re
 
 from django.conf import urls
 from django.urls import get_resolver
+from django.urls import resolvers
 from django.utils.deprecation import MiddlewareMixin
 
 from . import utils as maintenance
@@ -51,8 +52,9 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
                 return None
 
         # Otherwise show the user the 503 page
-        resolver = get_resolver()
+        resolver = resolvers.get_resolver(None)
+        resolve = resolver.resolve_error_handler
 
-        callback, param_dict = resolver.resolve_error_handler("503")
+        callback = resolve('503')
 
-        return callback(request, **param_dict)
+        return callback(request)

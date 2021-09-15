@@ -1,6 +1,12 @@
 Changes
 -------
 
+0.11.5
+~~~~~~
+
+- Made sure the app runs on Django 3.2, dropped support for Django < 2.x. It may
+  still work with Django 1.11, but this is no longer tested.
+
 0.11.4
 ~~~~~~
 

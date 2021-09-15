@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import re
-
+from django import VERSION as django_version
 from django.conf import urls
 from django.urls import get_resolver
+from django.urls import resolvers
 from django.utils.deprecation import MiddlewareMixin
 
 from . import utils as maintenance
@@ -13,7 +14,8 @@ urls.handler503 = "maintenancemode.views.temporary_unavailable"
 urls.__all__.append("handler503")
 
 IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
-
+DJANGO_VERSION_MAJOR = django_version[0]
+DJANGO_VERSION_MINOR = django_version[1]
 
 class MaintenanceModeMiddleware(MiddlewareMixin):
     def process_request(self, request):
@@ -49,10 +51,21 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
         for url in IGNORE_URLS:
             if url.match(request.path_info):
                 return None
-
         # Otherwise show the user the 503 page
-        resolver = get_resolver()
 
-        callback, param_dict = resolver.resolve_error_handler("503")
+        if DJANGO_VERSION_MAJOR >= 3 and DJANGO_VERSION_MINOR >= 2:
+            # Checks if DJANGO version is great than 3.2.0 for breaking change
+            resolver = resolvers.get_resolver(None)
+            resolve = resolver.resolve_error_handler
+            callback = resolve('503')
 
-        return callback(request, **param_dict)
+            return callback(request)
+        else:
+            resolver = get_resolver()
+
+            callback, param_dict = resolver.resolve_error_handler("503")
+
+            return callback(request, **param_dict)
+
+
+

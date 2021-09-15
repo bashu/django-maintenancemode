@@ -2,4 +2,4 @@ include AUTHORS
 include CHANGES.rst
 include LICENSE
 include README.rst
-recursive-exclude maintenancemode test*
+recursive-include maintenancemode templates/*.html

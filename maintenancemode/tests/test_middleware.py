@@ -11,11 +11,13 @@ from django.contrib.auth.models import User
 from django.template import TemplateDoesNotExist
 from django.test import TestCase
 from django.test.client import Client
+from django.test.utils import override_settings
 
 from maintenancemode import utils
 
-
+@override_settings(ROOT_URLCONF="maintenancemode.tests.urls", MAINTENANCE_MODE=False)
 class MaintenanceModeMiddlewareTestCase(TestCase):
+
     def setUp(self):
         utils.deactivate()  # make sure maintenance mode is off
 

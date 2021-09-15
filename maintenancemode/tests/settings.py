@@ -54,8 +54,3 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
-
-## Maintenance settings
-
-MAINTENANCE_MODE = False  # or ``True`` and use ``maintenance`` command
-MAINTENANCE_IGNORE_URLS = (re.compile(r"^/ignored.*"),)

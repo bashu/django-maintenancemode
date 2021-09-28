@@ -1,8 +1,8 @@
-from django.conf.urls import url
+from django.urls import re_path
 
 from django.http import HttpResponse
 
 urlpatterns = [
-    url("^$", lambda r: HttpResponse("Rendered response page"), name="test"),
-    url("^ignored/$", lambda r: HttpResponse("Rendered response page"), name="test"),
+    re_path("^$", lambda r: HttpResponse("Rendered response page"), name="test"),
+    re_path("^ignored/$", lambda r: HttpResponse("Rendered response page"), name="test"),
 ]

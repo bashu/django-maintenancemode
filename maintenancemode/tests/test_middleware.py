@@ -127,8 +127,11 @@ class MaintenanceModeMiddlewareTestCase(TestCase):
         # A path is ignored when applying the maintanance mode and
         # should be reachable normally
         with self.settings(MAINTENANCE_MODE=True):
-            with self.settings(IGNORE_URLS=(re.compile(r"^/ignored.*"),)):
-                response = self.client.get("/ignored/")
+            # Note that we cannot override the settings here, since they are
+            # ONLY used when the middleware starts up.
+            # For this reason, MAINTENANCE_IGNORE_URLS is set in the base
+            # settings file.
+            response = self.client.get("/ignored/")
         self.assertContains(response, text="Rendered response page", count=1, status_code=200)
 
     def test_management_command(self):

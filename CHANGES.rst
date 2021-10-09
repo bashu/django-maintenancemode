@@ -1,6 +1,16 @@
 Changes
 -------
 
+0.11.7
+~~~~~~
+
+- Fixed broken tests
+
+0.11.6
+~~~~~~
+
+- Nothing
+
 0.11.5
 ~~~~~~
 

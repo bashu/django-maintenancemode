@@ -1,8 +1,8 @@
-from django.conf.urls import url
+from django.urls import path
 
 from .views import index
 
 urlpatterns = [
-    url(r"^$", index),
-    url(r"^ignored/$", index),
+    path('', index),
+    path('ignored/', index),
 ]

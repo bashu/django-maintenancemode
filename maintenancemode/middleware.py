@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import re
 from django import VERSION as django_version
 from django.conf import urls
@@ -13,7 +11,7 @@ from .conf import settings
 urls.handler503 = "maintenancemode.views.temporary_unavailable"
 urls.__all__.append("handler503")
 
-IGNORE_URLS = tuple([re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS])
+IGNORE_URLS = tuple(re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS)
 DJANGO_VERSION_MAJOR = django_version[0]
 DJANGO_VERSION_MINOR = django_version[1]
 
@@ -30,7 +28,7 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
 
         # Preferentially check HTTP_X_FORWARDED_FOR b/c a proxy
         # server might have obscured REMOTE_ADDR
-        for ip in request.META.get("HTTP_X_FORWARDED_FOR", "").split(","):
+        for ip in request.headers.get('X-Forwarded-For', "").split(","):
             if ip.strip() in INTERNAL_IPS:
                 return None
 

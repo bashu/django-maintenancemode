@@ -1,15 +1,6 @@
 django-maintenancemode
 ======================
 
-django-maintenancemode is a middleware that allows you to temporary shutdown
-your site for maintenance work.
-
-Logged in users having staff credentials can still fully use
-the site as can users visiting the site from an IP address defined in
-Django's ``INTERNAL_IPS``.
-
-Authored by `Remco Wendt <https://github.com/shanx>`_, and some great `contributors <https://github.com/shanx/django-maintenancemode/contributors>`_.
-
 .. image:: https://img.shields.io/pypi/v/django-maintenancemode.svg
     :target: https://pypi.python.org/pypi/django-maintenancemode/
 
@@ -24,6 +15,15 @@ Authored by `Remco Wendt <https://github.com/shanx>`_, and some great `contribut
 
 .. image:: https://coveralls.io/repos/github/shanx/django-maintenancemode/badge.svg?branch=develop
     :target: https://coveralls.io/github/shanx/django-maintenancemode?branch=develop
+
+django-maintenancemode is a middleware that allows you to temporary shutdown
+your site for maintenance work.
+
+Logged in users having staff credentials can still fully use
+the site as can users visiting the site from an IP address defined in
+Django's ``INTERNAL_IPS``.
+
+Authored by `Remco Wendt <https://github.com/shanx>`_, and some great `contributors <https://github.com/shanx/django-maintenancemode/contributors>`_.
 
 How it works
 ------------

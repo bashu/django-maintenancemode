@@ -51,19 +51,19 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
                 return None
         # Otherwise show the user the 503 page
 
-        if DJANGO_VERSION_MAJOR >= 3 and DJANGO_VERSION_MINOR >= 2:
-            # Checks if DJANGO version is great than 3.2.0 for breaking change
-            resolver = resolvers.get_resolver(None)
-            resolve = resolver.resolve_error_handler
-            callback = resolve('503')
-
-            return callback(request)
-        else:
+        if (DJANGO_VERSION_MAJOR == 3 and DJANGO_VERSION_MINOR <= 2) or DJANGO_VERSION_MAJOR < 3:
+            # Checks if DJANGO version is less than 3.2.0 for breaking change
             resolver = get_resolver()
 
             callback, param_dict = resolver.resolve_error_handler("503")
 
             return callback(request, **param_dict)
 
+        else:
+            # Default behaviour for django 3.2 and higher
+            resolver = resolvers.get_resolver(None)
+            resolve = resolver.resolve_error_handler
+            callback = resolve('503')
 
+            return callback(request)
 

@@ -51,7 +51,7 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
                 return None
         # Otherwise show the user the 503 page
 
-        if (DJANGO_VERSION_MAJOR == 3 and DJANGO_VERSION_MINOR <= 2) or DJANGO_VERSION_MAJOR < 3:
+        if (DJANGO_VERSION_MAJOR == 3 and DJANGO_VERSION_MINOR < 2) or DJANGO_VERSION_MAJOR < 3:
             # Checks if DJANGO version is less than 3.2.0 for breaking change
             resolver = get_resolver()
 

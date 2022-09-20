@@ -10,8 +10,8 @@ django-maintenancemode
 .. image:: https://img.shields.io/github/license/shanx/django-maintenancemode.svg
     :target: https://pypi.python.org/pypi/django-maintenancemode/
 
-.. image:: https://img.shields.io/travis/shanx/django-maintenancemode.svg
-    :target: https://travis-ci.org/shanx/django-maintenancemode/
+.. image:: https://app.travis-ci.com/bashu/django-maintenancemode.svg?branch=develop
+    :target: https://app.travis-ci.com/github/bashu/django-maintenancemode
 
 .. image:: https://coveralls.io/repos/github/shanx/django-maintenancemode/badge.svg?branch=develop
     :target: https://coveralls.io/github/shanx/django-maintenancemode?branch=develop

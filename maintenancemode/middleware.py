@@ -1,6 +1,7 @@
 import re
 from django import VERSION as django_version
 from django.conf import urls
+from django.core.exceptions import MiddlewareNotUsed
 from django.urls import get_resolver
 from django.urls import resolvers
 from django.utils.deprecation import MiddlewareMixin
@@ -15,13 +16,20 @@ IGNORE_URLS = tuple(re.compile(u) for u in settings.MAINTENANCE_IGNORE_URLS)
 DJANGO_VERSION_MAJOR = django_version[0]
 DJANGO_VERSION_MINOR = django_version[1]
 
+
 class MaintenanceModeMiddleware(MiddlewareMixin):
+    def __init__(self, get_response):
+        if settings.MAINTENANCE_ONLY_EVALUATE_DURING_RELOAD and not maintenance.status():
+            raise MiddlewareNotUsed()
+
+        super().__init__(get_response=get_response)
+
     def process_request(self, request):
         # Allow access if middleware is not activated
         allow_staff = getattr(settings, "MAINTENANCE_ALLOW_STAFF", True)
         allow_superuser = getattr(settings, "MAINTENANCE_ALLOW_SUPERUSER", True)
 
-        if not (settings.MAINTENANCE_MODE or maintenance.status()):
+        if not maintenance.status():
             return None
 
         INTERNAL_IPS = maintenance.IPList(settings.INTERNAL_IPS)
@@ -66,4 +74,3 @@ class MaintenanceModeMiddleware(MiddlewareMixin):
             callback = resolve('503')
 
             return callback(request)
-
